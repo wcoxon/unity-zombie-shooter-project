@@ -5,6 +5,7 @@ ScriptsOnlyBuild:
     - guns
     - pathfinding
     - playerscript
+    - water
     - waves
     - zombiescript
     Unity.2D.Tilemap.Editor.dll:
@@ -69,15 +70,17 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 10870}
     - Class: 114
-      Script: {instanceID: 11104}
+      Script: {instanceID: 10984}
     - Class: 114
-      Script: {instanceID: 11196}
+      Script: {instanceID: 11098}
     - Class: 114
-      Script: {instanceID: 11476}
+      Script: {instanceID: 11108}
     - Class: 114
-      Script: {instanceID: 13060}
+      Script: {instanceID: 11200}
     - Class: 114
-      Script: {instanceID: 23466}
+      Script: {instanceID: 11480}
+    - Class: 114
+      Script: {instanceID: 15628}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -411,6 +414,12 @@ ScriptsOnlyBuild:
     className: TimelineAsset
   - hash:
       serializedVersion: 2
+      Hash: c8f2ac73a08bb8eb0a293d6eed20ff30
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: waves
+  - hash:
+      serializedVersion: 2
       Hash: ee0cef6caaac8ae485bfa82f000f0f7b
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
@@ -421,6 +430,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: AudioTrack
+  - hash:
+      serializedVersion: 2
+      Hash: 29b042bb77ec1cf6307a76b1d93cb973
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: pathfinding
   - hash:
       serializedVersion: 2
       Hash: ae83e830e7a90c0aff918c4c2e520825
@@ -543,17 +558,12 @@ ScriptsOnlyBuild:
     className: PlayableTrack
   - hash:
       serializedVersion: 2
-      Hash: 29b042bb77ec1cf6307a76b1d93cb973
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: pathfinding
-  - hash:
-      serializedVersion: 2
-      Hash: c8f2ac73a08bb8eb0a293d6eed20ff30
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: waves
+    className: water
   platform: 5
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Users/Bill/Top Down Zombie Shooter/build/Top Down Zombie Shooter.exe
+  playerPath: C:/Users/wcoxon/Documents/GitHub/unity-zombie-shooter-project/Top Down
+    Zombie Shooter/build/Top Down Zombie Shooter.exe
