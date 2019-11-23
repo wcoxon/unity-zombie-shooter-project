@@ -110,8 +110,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HighlightMap: {fileID: 0}
   WallMap: {fileID: 0}
-  RedHighlightTile: {fileID: 11400000, guid: 1df6a22c6f842914d85c017abb498b78, type: 2}
-  GreenHighlightTile: {fileID: 11400000, guid: ee32d79b106391547ac975e5345229b6, type: 2}
   BlueHighlightTile: {fileID: 11400000, guid: 7287980312562f34db5b91926757bc0c, type: 2}
   target: {fileID: 0}
 --- !u!58 &-2812276363623509043

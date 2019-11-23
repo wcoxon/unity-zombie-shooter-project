@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-
 public class Cell
 {
+    /*
     public static List<Cell> Cells;
     public static List<Cell> ClosedCells;
     public static List<Cell> OpenCells;
@@ -13,19 +13,19 @@ public class Cell
         Cells = new List<Cell>();
         ClosedCells = new List<Cell>();
         OpenCells = new List<Cell>();
-    }
+    }*/
 
-    
+
     public int PathLength;
-    
+
     public int DistanceFromTarget;
     public int FCost;
     public Vector3Int Coordinates;
     public Vector3Int TargetCoordinates;
     public Cell ParentCell;
-    public Cell(Vector3Int coordinates,Vector3Int targetCoordinates,Cell parentCell)
+    public Cell(Vector3Int coordinates, Vector3Int targetCoordinates, Cell parentCell)
     {
-        
+
         if (parentCell == null)
         {
             PathLength = 0;
@@ -36,20 +36,17 @@ public class Cell
             PathLength = parentCell.PathLength + Mathf.RoundToInt(Vector3Int.Distance(coordinates, parentCell.Coordinates) * 10);
             ParentCell = parentCell;
         }
-        
+
         Coordinates = coordinates;
         TargetCoordinates = targetCoordinates;
-        DistanceFromTarget = Mathf.RoundToInt(Vector3Int.Distance(coordinates, targetCoordinates)*10);
+        DistanceFromTarget = Mathf.RoundToInt(Vector3Int.Distance(coordinates, targetCoordinates) * 10);
         FCost = PathLength + DistanceFromTarget;
-        
-        if (ShouldReplace(this))
-        {
-            Cells.Add(this);
-            OpenCells.Add(this);
-        }
+        //Debug.Log("test");
+        //CompareCells(this, GetCellAtCoord(coordinates));
+
     }
-    
-    public static Cell GetCellAtCoord(Vector3Int coord)
+
+    /*public static Cell GetCellAtCoord(Vector3Int coord)
     {
         for (int x = 0; x < Cells.Count; x++)
         {
@@ -59,31 +56,26 @@ public class Cell
             }
         }
         return null;
-    }
-    public static bool ShouldReplace(Cell newcell)
+    }*/
+    /*public static void CompareCells(Cell cel1,Cell cel2)
     {
-        if (GetCellAtCoord(newcell.Coordinates)!=null)
+        if (cel2 == null)
         {
-            
-            if (GetCellAtCoord(newcell.Coordinates).FCost > newcell.FCost || (GetCellAtCoord(newcell.Coordinates).FCost == newcell.FCost && GetCellAtCoord(newcell.Coordinates).DistanceFromTarget > newcell.DistanceFromTarget))
-            {
-                Cells.Remove(GetCellAtCoord(newcell.Coordinates));
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            
-            return true;
+            Cells.Add(cel1);
+            OpenCells.Add(cel1);
         }
         
-    }
-    
-    public void select(Tilemap tm,Tilemap walls, Tile redTile,Tile greenTile)
+        else if (OpenCells.Contains(cel2)&&(cel2.FCost > cel1.FCost || (cel2.FCost == cel1.FCost && cel2.DistanceFromTarget > cel1.DistanceFromTarget)))
+        {
+            OpenCells.Remove(cel2);
+            Cells.Remove(cel2);
+            Cells.Add(cel1);
+            OpenCells.Add(cel1);
+        }
+        
+    }*/
+
+    /*public void select(Tilemap tm,Tilemap walls)
     {
         OpenCells.Remove(this);
         ClosedCells.Add(this);
@@ -96,7 +88,7 @@ public class Cell
                 if(x*x==y*y&& (walls.HasTile(Coordinates + new Vector3Int(x,0, 0))|| walls.HasTile(Coordinates + new Vector3Int(0, y, 0)))){
                     continue;
                 }
-                else if ((x != 0 || y != 0) && !walls.HasTile(Coordinates + new Vector3Int(x, y, 0)))
+                else if (/*(x != 0 || y != 0) && *//*!walls.HasTile(Coordinates + new Vector3Int(x, y, 0)))
                 {
                     new Cell(Coordinates + new Vector3Int(x, y, 0), TargetCoordinates, this);
                     
@@ -105,105 +97,167 @@ public class Cell
                 
             }
         }
-    }
-    
+    }*/
+
 }
 
 public class pathfinding : MonoBehaviour
 {
+    public List<Cell> Cells;
+    public List<Cell> ClosedCells;
+    public List<Cell> OpenCells;
     public GameObject HighlightMap;
     public GameObject WallMap;
-    public Tile RedHighlightTile;
-    public Tile GreenHighlightTile;
+    //public Tile RedHighlightTile;
+    //public Tile GreenHighlightTile;
     public Tile BlueHighlightTile;
-    
+
     public GameObject target;
-    public Stack<Cell> path;
-    
-    
+    Stack<Cell> path;
+
+
     // Start is called before the first frame update
     void Start()
     {
+        Cells = new List<Cell>();
+        ClosedCells = new List<Cell>();
+        OpenCells = new List<Cell>();
+
+        path = new Stack<Cell>();
         HighlightMap = GameObject.Find("HighlightMap");
         WallMap = GameObject.Find("Walls");
-        //HighlightMap = Instantiate(GameObject.Find("HighlightMap"),new Vector3(0,0,0),Quaternion.Euler(0,0,0));
-        //HighlightMap.transform.SetParent(GameObject.Find("Grid").transform);
-        //WallMap = GameObject.Find("Walls");
+
         target = GameObject.Find("player");
 
-        //locked = new List<Cell>();
-        //Debug.Log(Cell.Cells.Count);
-        new Cell(HighlightMap.GetComponent<Tilemap>().WorldToCell(transform.position), HighlightMap.GetComponent<Tilemap>().WorldToCell(target.transform.position), null);
 
-        
-        Cell.Cells[0].select(HighlightMap.GetComponent<Tilemap>(), WallMap.GetComponent<Tilemap>(), RedHighlightTile, GreenHighlightTile);
-        
+
+        //new Cell(HighlightMap.GetComponent<Tilemap>().WorldToCell(transform.position), HighlightMap.GetComponent<Tilemap>().WorldToCell(target.transform.position), null);
+        //Cell.Cells[0].select(HighlightMap.GetComponent<Tilemap>(), WallMap.GetComponent<Tilemap>());
+        //Debug.Log("test");
+        updatePath();
+        //Debug.Log("test");
 
     }
-    
-    void Update()
+    public Cell GetCellAtCoord(Vector3Int coord)
     {
-        //target.transform.Translate(Vector3.right *Input.GetAxisRaw("Horizontal")* Time.deltaTime+ Vector3.up * Input.GetAxisRaw("Vertical") * Time.deltaTime);
-        //Vector3.MoveTowards(transform.position, path.Peek().Coordinates, 5 * Time.deltaTime);
-        
-        Cell.Cells.Clear();
-        Cell.ClosedCells.Clear();
-        Cell.OpenCells.Clear();
-
-        new Cell(HighlightMap.GetComponent<Tilemap>().WorldToCell(transform.position), HighlightMap.GetComponent<Tilemap>().WorldToCell(target.transform.position), null);
-        Cell.Cells[0].select(HighlightMap.GetComponent<Tilemap>(), WallMap.GetComponent<Tilemap>(), RedHighlightTile, GreenHighlightTile);
-
-        while (Cell.ClosedCells[Cell.ClosedCells.Count - 1].Coordinates != Cell.ClosedCells[Cell.ClosedCells.Count - 1].TargetCoordinates && Cell.ClosedCells.Count < 200)
+        for (int x = 0; x < Cells.Count; x++)
         {
-            Cell.OpenCells.Sort((x, y) => x.FCost.CompareTo(y.FCost));
-            Cell.OpenCells[0].select(HighlightMap.GetComponent<Tilemap>(), WallMap.GetComponent<Tilemap>(), RedHighlightTile, GreenHighlightTile);
+            if (Cells[x].Coordinates == coord)
+            {
+                return Cells[x];
+            }
         }
+        return null;
+    }
+    public void CompareCells(Cell cel1, Cell cel2)
+    {
+        if (cel2 == null)
+        {
+            Cells.Add(cel1);
+            OpenCells.Add(cel1);
+        }
+
+        else if (OpenCells.Contains(cel2) && (cel2.FCost > cel1.FCost || (cel2.FCost == cel1.FCost && cel2.DistanceFromTarget > cel1.DistanceFromTarget)))
+        {
+            OpenCells.Remove(cel2);
+            Cells.Remove(cel2);
+            Cells.Add(cel1);
+            OpenCells.Add(cel1);
+        }
+
+    }
+    public void select(Cell cel)
+    {
+        OpenCells.Remove(cel);
+        ClosedCells.Add(cel);
+
+
+        for (int x = -1; x < 2; x++)
+        {
+            for (int y = -1; y < 2; y++)
+            {
+                if (x * x == y * y && (WallMap.GetComponent<Tilemap>().HasTile(cel.Coordinates + new Vector3Int(x, 0, 0)) || WallMap.GetComponent<Tilemap>().HasTile(cel.Coordinates + new Vector3Int(0, y, 0))))
+                {
+                    continue;
+                }
+                else if (/*(x != 0 || y != 0) && */!WallMap.GetComponent<Tilemap>().HasTile(cel.Coordinates + new Vector3Int(x, y, 0)))
+                {
+                    //new Cell(cel.Coordinates + new Vector3Int(x, y, 0), cel.TargetCoordinates, cel);
+                    CompareCells(new Cell(cel.Coordinates + new Vector3Int(x, y, 0), cel.TargetCoordinates, cel), GetCellAtCoord(cel.Coordinates + new Vector3Int(x, y, 0)));
+
+                }
+
+            }
+        }
+    }
+    void OnEnable()
+    {
+        Cells = new List<Cell>();
+        ClosedCells = new List<Cell>();
+        OpenCells = new List<Cell>();
         path = new Stack<Cell>();
-        path.Push(Cell.GetCellAtCoord(Cell.Cells[0].TargetCoordinates));
-        while (path.Peek().ParentCell.ParentCell != null && path.Count < 50)
+        //Debug.Log(path.Count);
+        HighlightMap = GameObject.Find("HighlightMap");
+        WallMap = GameObject.Find("Walls");
+
+        target = GameObject.Find("player");
+        updatePath();
+    }
+    void updatePath()
+    {
+        //Debug.Log("test");
+        Cells.Clear();
+        ClosedCells.Clear();
+        OpenCells.Clear();
+
+        CompareCells(new Cell(HighlightMap.GetComponent<Tilemap>().WorldToCell(transform.position), HighlightMap.GetComponent<Tilemap>().WorldToCell(target.transform.position), null), GetCellAtCoord(HighlightMap.GetComponent<Tilemap>().WorldToCell(transform.position)));
+
+        select(Cells[0]);
+
+        while (ClosedCells[ClosedCells.Count - 1].Coordinates != ClosedCells[ClosedCells.Count - 1].TargetCoordinates && ClosedCells.Count < 200)
+        {
+
+            OpenCells.Sort((x, y) => x.FCost.CompareTo(y.FCost));
+
+            select(OpenCells[0]);
+        }
+        path.Clear();
+
+        path.Push(GetCellAtCoord(Cells[0].TargetCoordinates));
+
+        while (path.Peek().ParentCell != null && path.Count < 50)
         {
             path.Push(path.Peek().ParentCell);
+
         }
 
-        HighlightMap.GetComponent<Tilemap>().ClearAllTiles();
+    }
+    void FixedUpdate()
+    {
+
+        if (path.Count == 1)
+        {
+            Debug.Log("--------");
+            Debug.Log(HighlightMap.GetComponent<Tilemap>().WorldToCell(target.transform.position));
+            Debug.Log(Cells[0].TargetCoordinates);
+        }
         
+        if (HighlightMap.GetComponent<Tilemap>().WorldToCell(target.transform.position) != Cells[0].TargetCoordinates)
+        {
+            
+            updatePath();
+
+        }
         
-
-        foreach (Cell cel in Cell.Cells)
-        {
-            /*if (path.Contains(cel))
-            {
-                HighlightMap.GetComponent<Tilemap>().SetTile(cel.Coordinates, BlueHighlightTile);
-            }*/
-            /*else if (Cell.ClosedCells.Contains(cel))
-            {
-                HighlightMap.GetComponent<Tilemap>().SetTile(cel.Coordinates, RedHighlightTile);
-            }
-            else if (Cell.OpenCells.Contains(cel))
-            {
-                HighlightMap.GetComponent<Tilemap>().SetTile(cel.Coordinates, GreenHighlightTile);
-            }*/
-            
-
-        }
-        if (Input.GetMouseButtonDown(0) && Cell.GetCellAtCoord(HighlightMap.GetComponent<Tilemap>().WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition)))!=null)
-        {
-            Debug.Log(Cell.GetCellAtCoord(HighlightMap.GetComponent<Tilemap>().WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition))).PathLength);
-            Debug.Log(Cell.GetCellAtCoord(HighlightMap.GetComponent<Tilemap>().WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition))).DistanceFromTarget);
-            Debug.Log(Cell.GetCellAtCoord(HighlightMap.GetComponent<Tilemap>().WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition))).FCost);
-            
-            Debug.Log(Cell.GetCellAtCoord(HighlightMap.GetComponent<Tilemap>().WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition))).ParentCell.Coordinates);
-            
-            
-        }
-        if (Input.GetMouseButton(1))
-        {
-            Debug.Log(Cell.Cells.Count);
-        }
-        transform.position = new Vector3(transform.position.x, transform.position.y, 0);
         if (path.Count > 0)
         {
-            transform.position = Vector3.MoveTowards(transform.position, path.Peek().Coordinates, 5 * Time.deltaTime);
+            if (path.Peek().Coordinates == HighlightMap.GetComponent<Tilemap>().WorldToCell(transform.position) && path.Count > 1)
+            {
+                path.Pop();
+            }
+            //HighlightMap.GetComponent<Tilemap>().SetTile(path.Peek().Coordinates, BlueHighlightTile);
+            transform.position = Vector3.MoveTowards(transform.position, HighlightMap.GetComponent<Tilemap>().GetCellCenterWorld(path.Peek().Coordinates), 5 * Time.deltaTime);
+
         }
 
     }

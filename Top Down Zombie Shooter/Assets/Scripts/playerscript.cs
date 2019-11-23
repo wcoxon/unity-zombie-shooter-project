@@ -43,7 +43,7 @@ public class playerscript : MonoBehaviour
         {
             health -= 5;
         }
-        Debug.Log("hit");
+        //Debug.Log("hit");
         wallNormal = new Vector2(0, 0);
         for (int x = 0; x < collision.contacts.Length; x++)
         {
@@ -72,6 +72,20 @@ public class playerscript : MonoBehaviour
         //pter.transform.position = transform.position + new Vector3(normalise(resistance).x, normalise(resistance).y);
         //velocity += new Vector2(normalise(pter.transform.position).x * Mathf.Abs(velocity.x) * Time.deltaTime, normalise(pter.transform.position).y * Mathf.Abs(velocity.y) * Time.deltaTime);
         //pter.transform.position = new Vector2(transform.position.x,transform.position.y) + normalise(collision.contacts[0].normal);
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Water")
+        {
+            maxspeed = 5f;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag == "Water")
+        {
+            maxspeed = 9f;
+        }
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
@@ -143,9 +157,9 @@ public class playerscript : MonoBehaviour
         pter.transform.position = new Vector3(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y, 0);
 
         Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10.0f);
-        aimvector = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x - transform.position.x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y - transform.position.y);
+        aimvector = Vector2.MoveTowards(aimvector,new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x - transform.position.x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y - transform.position.y),Time.deltaTime*20f*Vector3.Distance(aimvector, new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x - transform.position.x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y - transform.position.y)));
         transform.eulerAngles = new Vector3(0, 0, Mathf.Atan2(aimvector.y, aimvector.x) * 180 / Mathf.PI - 90.0f);
-        Camera.main.transform.position = new Vector3(transform.position.x / 2 + Camera.main.ScreenToWorldPoint(Input.mousePosition).x / 2, transform.position.y / 2 + Camera.main.ScreenToWorldPoint(Input.mousePosition).y / 2, -10.0f);
+        Camera.main.transform.position = new Vector3(transform.position.x+aimvector.x, transform.position.y+aimvector.y, -10);//new Vector3(transform.position.x / 2 + Camera.main.ScreenToWorldPoint(Input.mousePosition).x / 2, transform.position.y / 2 + Camera.main.ScreenToWorldPoint(Input.mousePosition).y / 2, -10.0f);
         //Debug.Log(pter.transform.position == transform.position);
     }
 }

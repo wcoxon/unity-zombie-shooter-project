@@ -22,7 +22,7 @@ public class bulletscript : MonoBehaviour
         //Debug.Log("collided");
         if(other.gameObject.tag == "Zombie")
         {
-            Debug.Log("collided");
+            //Debug.Log("collided");
             other.gameObject.GetComponent<zombiescript>().health -= damage;
         }
         if (other.gameObject != parent && !other.isTrigger)

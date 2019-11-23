@@ -19,7 +19,13 @@ public class zombiescript : MonoBehaviour
         if (health <= 0)
         {
             //Destroy(GetComponent<pathfinding>().HighlightMap);
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            GameObject.Find("Zombies").GetComponent<waves>().pool.Push(gameObject);
+            health = 100;
+            //gameObject.GetComponent<pathfinding>().enabled = false;
+            gameObject.SetActive(false);
+            transform.SetParent(GameObject.Find("ZombiePool").transform);
+
         }
     }
 }
