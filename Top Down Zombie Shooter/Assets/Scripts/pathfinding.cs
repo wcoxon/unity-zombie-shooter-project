@@ -103,9 +103,9 @@ public class Cell
 
 public class pathfinding : MonoBehaviour
 {
-    public List<Cell> Cells;
-    public List<Cell> ClosedCells;
-    public List<Cell> OpenCells;
+    //public List<Cell> Cells;
+   // public List<Cell> ClosedCells;
+   // public List<Cell> OpenCells;
     public GameObject HighlightMap;
     public GameObject WallMap;
     //public Tile RedHighlightTile;
@@ -113,18 +113,18 @@ public class pathfinding : MonoBehaviour
     public Tile BlueHighlightTile;
 
     public GameObject target;
-    Stack<Cell> path;
+    //Stack<Cell> path;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        Cells = new List<Cell>();
-        ClosedCells = new List<Cell>();
-        OpenCells = new List<Cell>();
+        //Cells = new List<Cell>();
+        //ClosedCells = new List<Cell>();
+        //OpenCells = new List<Cell>();
 
-        path = new Stack<Cell>();
-        HighlightMap = GameObject.Find("HighlightMap");
+        //path = new Stack<Cell>();
+        //HighlightMap = GameObject.Find("HighlightMap");
         WallMap = GameObject.Find("Walls");
 
         target = GameObject.Find("player");
@@ -134,11 +134,11 @@ public class pathfinding : MonoBehaviour
         //new Cell(HighlightMap.GetComponent<Tilemap>().WorldToCell(transform.position), HighlightMap.GetComponent<Tilemap>().WorldToCell(target.transform.position), null);
         //Cell.Cells[0].select(HighlightMap.GetComponent<Tilemap>(), WallMap.GetComponent<Tilemap>());
         //Debug.Log("test");
-        updatePath();
+        //updatePath();
         //Debug.Log("test");
 
     }
-    public Cell GetCellAtCoord(Vector3Int coord)
+    /*public Cell GetCellAtCoord(Vector3Int coord)
     {
         for (int x = 0; x < Cells.Count; x++)
         {
@@ -180,7 +180,7 @@ public class pathfinding : MonoBehaviour
                 {
                     continue;
                 }
-                else if (/*(x != 0 || y != 0) && */!WallMap.GetComponent<Tilemap>().HasTile(cel.Coordinates + new Vector3Int(x, y, 0)))
+                else if (/*(x != 0 || y != 0) && *//*!WallMap.GetComponent<Tilemap>().HasTile(cel.Coordinates + new Vector3Int(x, y, 0)))
                 {
                     //new Cell(cel.Coordinates + new Vector3Int(x, y, 0), cel.TargetCoordinates, cel);
                     CompareCells(new Cell(cel.Coordinates + new Vector3Int(x, y, 0), cel.TargetCoordinates, cel), GetCellAtCoord(cel.Coordinates + new Vector3Int(x, y, 0)));
@@ -189,21 +189,21 @@ public class pathfinding : MonoBehaviour
 
             }
         }
-    }
+    }*/
     void OnEnable()
     {
-        Cells = new List<Cell>();
+        /*Cells = new List<Cell>();
         ClosedCells = new List<Cell>();
         OpenCells = new List<Cell>();
-        path = new Stack<Cell>();
+        path = new Stack<Cell>();*/
         //Debug.Log(path.Count);
-        HighlightMap = GameObject.Find("HighlightMap");
+        //HighlightMap = GameObject.Find("HighlightMap");
         WallMap = GameObject.Find("Walls");
 
         target = GameObject.Find("player");
-        updatePath();
+        //updatePath();
     }
-    void updatePath()
+    /*void updatePath()
     {
         //Debug.Log("test");
         Cells.Clear();
@@ -231,11 +231,13 @@ public class pathfinding : MonoBehaviour
 
         }
 
-    }
+    }*/
     void FixedUpdate()
     {
 
-        if (path.Count == 1)
+        Vector3.MoveTowards(transform.position, GameObject.Find("pathfinder").GetComponent<pathfindingfunction>().nextTileTowards(transform.position, target.transform.position, WallMap.GetComponent<Tilemap>()),Time.deltaTime);
+        HighlightMap.GetComponent<Tilemap>().SetTile(HighlightMap.GetComponent<Tilemap>().WorldToCell(GameObject.Find("pathfinder").GetComponent<pathfindingfunction>().nextTileTowards(transform.position, target.transform.position, WallMap.GetComponent<Tilemap>())), BlueHighlightTile);
+        /*if (path.Count == 1)
         {
             Debug.Log("--------");
             Debug.Log(HighlightMap.GetComponent<Tilemap>().WorldToCell(target.transform.position));
@@ -258,7 +260,7 @@ public class pathfinding : MonoBehaviour
             //HighlightMap.GetComponent<Tilemap>().SetTile(path.Peek().Coordinates, BlueHighlightTile);
             transform.position = Vector3.MoveTowards(transform.position, HighlightMap.GetComponent<Tilemap>().GetCellCenterWorld(path.Peek().Coordinates), 5 * Time.deltaTime);
 
-        }
+        }*/
 
     }
 }
