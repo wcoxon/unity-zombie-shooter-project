@@ -416,6 +416,7 @@ MonoBehaviour:
   WallMap: {fileID: 0}
   BlueHighlightTile: {fileID: 0}
   target: {fileID: 0}
+  pf: {fileID: 0}
 --- !u!4 &500081114
 Transform:
   m_ObjectHideFlags: 0
@@ -12887,16 +12888,5 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 625758001}
-    - target: {fileID: -2093096932032593872, guid: f24a91e4a786d3644abfeddde75271ed,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -2093096932032593872, guid: f24a91e4a786d3644abfeddde75271ed,
-        type: 3}
-      propertyPath: BlueHighlightTile
-      value: 
-      objectReference: {fileID: 11400000, guid: 7287980312562f34db5b91926757bc0c,
-        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f24a91e4a786d3644abfeddde75271ed, type: 3}

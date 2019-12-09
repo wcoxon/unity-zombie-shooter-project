@@ -22,13 +22,13 @@ public class waves : MonoBehaviour
         //Debug.Log("reuse " + pool.Count);
         for (int x = 0;x<instantiate; x++)
         {
-            Instantiate(zombie, spawners.transform.GetChild(Random.Range(0, spawners.transform.childCount)).transform.position+Random.Range(-1.0f,1.0f)*new Vector3(1,1,0),Quaternion.Euler(0,0,0),transform);
+            Instantiate(zombie, spawners.transform.GetChild(Random.Range(0, spawners.transform.childCount)).transform.position+Random.Range(-.25f,.25f)*new Vector3(1,1,0),Quaternion.Euler(0,0,0),transform);
 
         }
         for(int x = 0; x<reuse; x++)
         {
             pool.Peek().transform.SetParent(transform);
-            pool.Peek().transform.position = spawners.transform.GetChild(Random.Range(0, spawners.transform.childCount)).transform.position + Random.Range(-1.0f, 1.0f) * new Vector3(1, 1, 0);
+            pool.Peek().transform.position = spawners.transform.GetChild(Random.Range(0, spawners.transform.childCount)).transform.position + Random.Range(-.25f, .25f) * new Vector3(1, 1, 0);
             //pool.Peek().GetComponent<pathfinding>().enabled = true;
             pool.Pop().SetActive(true);
 

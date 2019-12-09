@@ -65,6 +65,14 @@ public class pathfindingfunction : MonoBehaviour
     }
     public Vector3 nextTileTowards(Vector3 position, Vector3 target, Tilemap walls)
     {
+        if (walls.HasTile(walls.WorldToCell(position)))
+        {
+            position = new Vector3(0, 0, 0);
+        }
+        if(walls.WorldToCell(position)== walls.WorldToCell(target))
+        {
+            return target;
+        }
         List<Cell> Cells = new List<Cell>();
         List<Cell> Closed = new List<Cell>();
         List<Cell> Open = new List<Cell>();
@@ -89,7 +97,47 @@ public class pathfindingfunction : MonoBehaviour
         path.Pop();
         //Debug.Log(path.Peek().Coordinates);
         //Debug.Log(position);
-        return path.Pop().Coordinates;
+        return walls.GetCellCenterWorld(path.Pop().Coordinates);
+
+    }
+    public Stack<Vector3> path(Vector3 position, Vector3 target, Tilemap walls)
+    {
+        if (walls.HasTile(walls.WorldToCell(position)))
+        {
+            position = new Vector3(0, 0, 0);
+        }
+        List<Cell> Cells = new List<Cell>();
+        List<Cell> Closed = new List<Cell>();
+        List<Cell> Open = new List<Cell>();
+        Stack<Cell> path = new Stack<Cell>();
+        Stack<Vector3> ret = new Stack<Vector3>();
+        if (walls.WorldToCell(position) == walls.WorldToCell(target))
+        {
+            ret.Push(target);
+            return ret;
+        }
+        CompareCells(new Cell(walls.WorldToCell(position), walls.WorldToCell(target), null), GetCellAtCoord(walls.WorldToCell(position), Cells), Cells, Open);
+        select(Cells[0], Open, Closed, Cells, walls);
+        while (Open.Count > 0 && Closed[Closed.Count - 1].Coordinates != Closed[Closed.Count - 1].TargetCoordinates)
+        {
+            Open.Sort((x, y) => x.FCost.CompareTo(y.FCost));
+
+            select(Open[0], Open, Closed, Cells, walls);
+        }
+        path.Clear();
+
+        path.Push(GetCellAtCoord(Cells[0].TargetCoordinates, Cells));
+
+        while (path.Peek().ParentCell != null)
+        {
+            ret.Push(walls.GetCellCenterWorld(path.Peek().Coordinates));
+            path.Push(path.Peek().ParentCell);
+
+        }
+        //ret.Pop();
+        //Debug.Log(path.Peek().Coordinates);
+        //Debug.Log(position);
+        return ret;
 
     }
     // Update is called once per frame
