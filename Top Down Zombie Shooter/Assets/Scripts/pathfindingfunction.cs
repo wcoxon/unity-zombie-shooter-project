@@ -5,10 +5,15 @@ using UnityEngine.Tilemaps;
 
 public class pathfindingfunction : MonoBehaviour
 {
-    
+
     // Start is called before the first frame update
+    
+    public GameObject player;
+    //public Vector3 playertile;
+    public GameObject wall;
     void Start()
     {
+        //playertile = wall.GetComponent<UnityEngine.Tilemaps.Tilemap>().WorldToCell(player.transform.position);
         
     }
     public Cell GetCellAtCoord(Vector3Int coord,List<Cell> Cells)
@@ -39,6 +44,7 @@ public class pathfindingfunction : MonoBehaviour
         }
 
     }
+    
     public void select(Cell cel,List<Cell> Open,List<Cell> Closed,List<Cell> Cells,Tilemap walls)
     {
         Open.Remove(cel);
@@ -65,6 +71,7 @@ public class pathfindingfunction : MonoBehaviour
     }
     public Vector3 nextTileTowards(Vector3 position, Vector3 target, Tilemap walls)
     {
+
         if (walls.HasTile(walls.WorldToCell(position)))
         {
             position = new Vector3(0, 0, 0);
@@ -143,6 +150,12 @@ public class pathfindingfunction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        /*if(playertile != wall.GetComponent<UnityEngine.Tilemaps.Tilemap>().WorldToCell(player.transform.position))
+        {
+            for(int x=0;x< GameObject.Find("Zombies").transform.childCount; x++)
+            {
+                GameObject.Find("Zombies").transform.GetChild(x).GetComponent<pathfinding>().updatenext();
+            }
+        }*/
     }
 }

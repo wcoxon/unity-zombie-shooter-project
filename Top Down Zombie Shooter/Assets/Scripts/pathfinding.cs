@@ -113,164 +113,63 @@ public class pathfinding : MonoBehaviour
     //public Tile BlueHighlightTile;
     public Stack<Vector3> path;
     public GameObject target;
+    public Vector3 targetpos;
     //Stack<Cell> path;
     public GameObject pf;
-
+    //public Vector3 next;
     // Start is called before the first frame update
     void Start()
     {
         path = new Stack<Vector3>();
         pf = GameObject.Find("pathfinder");
-        //Cells = new List<Cell>();
-        //ClosedCells = new List<Cell>();
-        //OpenCells = new List<Cell>();
-
-        //path = new Stack<Cell>();
-        //HighlightMap = GameObject.Find("HighlightMap");
+        
         WallMap = GameObject.Find("Walls");
 
         target = GameObject.Find("player");
 
+        path = pf.GetComponent<pathfindingfunction>().path(transform.position, target.transform.position, WallMap.GetComponent<Tilemap>());
 
 
-        //new Cell(HighlightMap.GetComponent<Tilemap>().WorldToCell(transform.position), HighlightMap.GetComponent<Tilemap>().WorldToCell(target.transform.position), null);
-        //Cell.Cells[0].select(HighlightMap.GetComponent<Tilemap>(), WallMap.GetComponent<Tilemap>());
-        //Debug.Log("test");
-        //updatePath();
-        //Debug.Log("test");
+
 
     }
-    /*public Cell GetCellAtCoord(Vector3Int coord)
+    /*public void updatenext()
     {
-        for (int x = 0; x < Cells.Count; x++)
-        {
-            if (Cells[x].Coordinates == coord)
-            {
-                return Cells[x];
-            }
-        }
-        return null;
-    }
-    public void CompareCells(Cell cel1, Cell cel2)
-    {
-        if (cel2 == null)
-        {
-            Cells.Add(cel1);
-            OpenCells.Add(cel1);
-        }
-
-        else if (OpenCells.Contains(cel2) && (cel2.FCost > cel1.FCost || (cel2.FCost == cel1.FCost && cel2.DistanceFromTarget > cel1.DistanceFromTarget)))
-        {
-            OpenCells.Remove(cel2);
-            Cells.Remove(cel2);
-            Cells.Add(cel1);
-            OpenCells.Add(cel1);
-        }
-
-    }
-    public void select(Cell cel)
-    {
-        OpenCells.Remove(cel);
-        ClosedCells.Add(cel);
-
-
-        for (int x = -1; x < 2; x++)
-        {
-            for (int y = -1; y < 2; y++)
-            {
-                if (x * x == y * y && (WallMap.GetComponent<Tilemap>().HasTile(cel.Coordinates + new Vector3Int(x, 0, 0)) || WallMap.GetComponent<Tilemap>().HasTile(cel.Coordinates + new Vector3Int(0, y, 0))))
-                {
-                    continue;
-                }
-                else if (/*(x != 0 || y != 0) && *//*!WallMap.GetComponent<Tilemap>().HasTile(cel.Coordinates + new Vector3Int(x, y, 0)))
-                {
-                    //new Cell(cel.Coordinates + new Vector3Int(x, y, 0), cel.TargetCoordinates, cel);
-                    CompareCells(new Cell(cel.Coordinates + new Vector3Int(x, y, 0), cel.TargetCoordinates, cel), GetCellAtCoord(cel.Coordinates + new Vector3Int(x, y, 0)));
-
-                }
-
-            }
-        }
+        next = GameObject.Find("pathfinder").GetComponent<pathfindingfunction>().nextTileTowards(transform.position, target.transform.position, WallMap.GetComponent<Tilemap>());
     }*/
     void OnEnable()
     {
-        /*Cells = new List<Cell>();
-        ClosedCells = new List<Cell>();
-        OpenCells = new List<Cell>();
-        path = new Stack<Cell>();*/
-        //Debug.Log(path.Count);
-        //HighlightMap = GameObject.Find("HighlightMap");
+        pf = GameObject.Find("pathfinder");
         WallMap = GameObject.Find("Walls");
 
         target = GameObject.Find("player");
-        //updatePath();
+
+        path = pf.GetComponent<pathfindingfunction>().path(transform.position, target.transform.position, WallMap.GetComponent<Tilemap>());
+
     }
-    /*void updatePath()
-    {
-        //Debug.Log("test");
-        Cells.Clear();
-        ClosedCells.Clear();
-        OpenCells.Clear();
 
-        CompareCells(new Cell(HighlightMap.GetComponent<Tilemap>().WorldToCell(transform.position), HighlightMap.GetComponent<Tilemap>().WorldToCell(target.transform.position), null), GetCellAtCoord(HighlightMap.GetComponent<Tilemap>().WorldToCell(transform.position)));
-
-        select(Cells[0]);
-
-        while (ClosedCells[ClosedCells.Count - 1].Coordinates != ClosedCells[ClosedCells.Count - 1].TargetCoordinates && ClosedCells.Count < 200)
-        {
-
-            OpenCells.Sort((x, y) => x.FCost.CompareTo(y.FCost));
-
-            select(OpenCells[0]);
-        }
-        path.Clear();
-
-        path.Push(GetCellAtCoord(Cells[0].TargetCoordinates));
-
-        while (path.Peek().ParentCell != null && path.Count < 50)
-        {
-            path.Push(path.Peek().ParentCell);
-
-        }
-
-    }*/
     void FixedUpdate()
     {
-        //HighlightMap.GetComponent<Tilemap>().ClearAllTiles();
-        //Vector3.MoveTowards(transform.position, GameObject.Find("pathfinder").GetComponent<pathfindingfunction>().nextTileTowards(transform.position, target.transform.position, WallMap.GetComponent<Tilemap>()),Time.deltaTime);
-        //HighlightMap.GetComponent<Tilemap>().SetTile(HighlightMap.GetComponent<Tilemap>().WorldToCell(GameObject.Find("pathfinder").GetComponent<pathfindingfunction>().nextTileTowards(transform.position, target.transform.position, WallMap.GetComponent<Tilemap>())), BlueHighlightTile);
-        /*if (path.ToArray()[path.Count - 1] != target.transform.position)
-        {
-            path = GameObject.Find("pathfinder").GetComponent<pathfindingfunction>().path(transform.position, target.transform.position, WallMap.GetComponent<Tilemap>());
-        }*/
-        transform.position = Vector3.MoveTowards(transform.position, GameObject.Find("pathfinder").GetComponent<pathfindingfunction>().nextTileTowards(transform.position, target.transform.position, WallMap.GetComponent<Tilemap>()), 5 * Time.deltaTime);
-
-        /*if (path.Count == 1)
-        {
-            Debug.Log("--------");
-            Debug.Log(HighlightMap.GetComponent<Tilemap>().WorldToCell(target.transform.position));
-            Debug.Log(Cells[0].TargetCoordinates);
-        }
         
-        if (HighlightMap.GetComponent<Tilemap>().WorldToCell(target.transform.position) != Cells[0].TargetCoordinates)
+        /*if(transform.position == next)
         {
-            
-            updatePath();
+            updatenext();
+        }*/
+        if(WallMap.GetComponent<Tilemap>().WorldToCell(target.transform.position) != WallMap.GetComponent<Tilemap>().WorldToCell(targetpos))
+        {
+            //Debug.Log("moved");
+            targetpos = target.transform.position;
+            path = pf.GetComponent<pathfindingfunction>().path(transform.position, target.transform.position, WallMap.GetComponent<Tilemap>());
 
         }
-        */
-        /*
-        if (path.Count > 0)
+        if (transform.position == path.Peek()&&path.Count>1)
         {
-            if (path.Peek() == WallMap.GetComponent<Tilemap>().WorldToCell(transform.position) && path.Count > 1)
-            {
-                path.Pop();
-            }
-            //HighlightMap.GetComponent<Tilemap>().SetTile(path.Peek().Coordinates, BlueHighlightTile);
-            transform.position = Vector3.MoveTowards(transform.position, WallMap.GetComponent<Tilemap>().GetCellCenterWorld(WallMap.GetComponent<Tilemap>().WorldToCell(path.Peek())), 5 * Time.deltaTime);
 
+            path.Pop();
         }
-        */
+        transform.position = Vector3.MoveTowards(transform.position,path.Peek(), 5 * Time.deltaTime);
+
+        
 
     }
 }
