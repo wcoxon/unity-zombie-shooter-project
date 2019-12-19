@@ -25,6 +25,7 @@ public class Gun
 
 public class guns : MonoBehaviour
 {
+    Stack<GameObject> bullets;
     public GameObject bullet;
     public Gun machinegun;
     public float nextFire;
@@ -41,7 +42,7 @@ public class guns : MonoBehaviour
         nextFire = 0.0f;
         machinegun = new Gun(15, 5, 30, 19,3,1,5);
         pistol = new Gun(100, 100, 100, 10, 100, 5, 10);
-        equipped = pistol;
+        equipped = machinegun;
         //pistol = new Gun(gunstuff[0], gunstuff[1], gunstuff[2], gunstuff[3], gunstuff[4], (int)gunstuff[5],gunstuff[6]);
         //equipped = pistol;
     }

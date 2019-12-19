@@ -104,10 +104,11 @@ public class Cell
 public class pathfinding : MonoBehaviour
 {
     //public List<Cell> Cells;
-   // public List<Cell> ClosedCells;
-   // public List<Cell> OpenCells;
+    // public List<Cell> ClosedCells;
+    // public List<Cell> OpenCells;
     //public GameObject HighlightMap;
-    public GameObject WallMap;
+    //public GameObject WallMap;
+    Tilemap WallMap;
     //public Tile RedHighlightTile;
     //public Tile GreenHighlightTile;
     //public Tile BlueHighlightTile;
@@ -115,15 +116,19 @@ public class pathfinding : MonoBehaviour
     public GameObject target;
     public Vector3 targetpos;
     //Stack<Cell> path;
-    public GameObject pf;
+    //public GameObject pf;
+    //pathfindingfunction pf;
     //public Vector3 next;
     // Start is called before the first frame update
-    void Start()
+    public zombiescript zs;
+    /*void Start()
     {
         path = new Stack<Vector3>();
-        pf = GameObject.Find("pathfinder");
-        
-        WallMap = GameObject.Find("Walls");
+        //pf = GameObject.Find("pathfinder");
+        pf = GetComponent<zombiescript>().WaveScript.pf;
+
+        //WallMap = GameObject.Find("Walls");
+        WallMap = GetComponent<zombiescript>().WaveScript.WallMap;
 
         target = GameObject.Find("player");
 
@@ -132,19 +137,25 @@ public class pathfinding : MonoBehaviour
 
 
 
-    }
+    }*/
+
     /*public void updatenext()
     {
         next = GameObject.Find("pathfinder").GetComponent<pathfindingfunction>().nextTileTowards(transform.position, target.transform.position, WallMap.GetComponent<Tilemap>());
     }*/
     void OnEnable()
     {
-        pf = GameObject.Find("pathfinder");
-        WallMap = GameObject.Find("Walls");
+        //pf = GameObject.Find("pathfinder");
+        //Debug.Log(GetComponent<zombiescript>().WaveScript.wave);
+        //zs.WaveScript.pf
+        //pf = GetComponent<zombiescript>().WaveScript.pf;
+
+        //WallMap = GameObject.Find("Walls");
+        WallMap = GetComponent<zombiescript>().WaveScript.WallMap;
 
         target = GameObject.Find("player");
 
-        path = pf.GetComponent<pathfindingfunction>().path(transform.position, target.transform.position, WallMap.GetComponent<Tilemap>());
+        path = zs.WaveScript.pf.GetComponent<pathfindingfunction>().path(transform.position, target.transform.position, WallMap.GetComponent<Tilemap>());
 
     }
 
@@ -155,16 +166,15 @@ public class pathfinding : MonoBehaviour
         {
             updatenext();
         }*/
-        if(WallMap.GetComponent<Tilemap>().WorldToCell(target.transform.position) != WallMap.GetComponent<Tilemap>().WorldToCell(targetpos))
+        if(WallMap.WorldToCell(target.transform.position) != WallMap.WorldToCell(targetpos))
         {
             //Debug.Log("moved");
             targetpos = target.transform.position;
-            path = pf.GetComponent<pathfindingfunction>().path(transform.position, target.transform.position, WallMap.GetComponent<Tilemap>());
+            path = zs.WaveScript.pf.path(transform.position, target.transform.position, WallMap);
 
         }
         if (transform.position == path.Peek()&&path.Count>1)
         {
-
             path.Pop();
         }
         transform.position = Vector3.MoveTowards(transform.position,path.Peek(), 5 * Time.deltaTime);

@@ -96,6 +96,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  WaveScript: {fileID: 0}
 --- !u!114 &-2093096932032593872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103,16 +104,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3003262639003547679}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 17ab923c10866a74f94a3b2162e438c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HighlightMap: {fileID: 0}
-  WallMap: {fileID: 0}
-  BlueHighlightTile: {fileID: 11400000, guid: 7287980312562f34db5b91926757bc0c, type: 2}
   target: {fileID: 0}
-  pf: {fileID: 0}
+  targetpos: {x: 0, y: 0, z: 0}
+  zs: {fileID: -3842155721804243260}
 --- !u!58 &-2812276363623509043
 CircleCollider2D:
   m_ObjectHideFlags: 0
