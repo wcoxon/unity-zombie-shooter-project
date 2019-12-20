@@ -23,12 +23,18 @@ public class bulletscript : MonoBehaviour
         if(other.gameObject.tag == "Zombie")
         {
             //Debug.Log("collided");
+            //other.attachedRigidbody.velocity -= new Vector2(Mathf.Cos(transform.rotation.z * Mathf.PI / 180), Mathf.Sin(transform.rotation.z * Mathf.PI / 180))*5;
+            other.attachedRigidbody.velocity = new Vector2(Mathf.Cos(transform.eulerAngles.z * Mathf.PI / 180+90), Mathf.Sin(transform.eulerAngles.z * Mathf.PI / 180+90))*5;
             other.gameObject.GetComponent<zombiescript>().health -= damage;
         }
-        if (other.gameObject != parent && !other.isTrigger)
+        if(other.gameObject.tag == "Wall"||other.gameObject.tag == "Zombie")
         {
             Destroy(gameObject);
         }
+        /*if (other.gameObject != parent && !other.isTrigger)
+        {
+            Destroy(gameObject);
+        }*/
     }
 
     // Update is called once per frame

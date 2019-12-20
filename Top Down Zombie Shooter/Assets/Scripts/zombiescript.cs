@@ -8,6 +8,7 @@ public class zombiescript : MonoBehaviour
     public waves WaveScript;
     pathfinding pfScript;
     CircleCollider2D coll;
+    public Rigidbody2D rb;
     //public GameObject pf;
     //public GameObject WallMap;
     //public GameObject Target;
@@ -27,6 +28,8 @@ public class zombiescript : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        
+        rb.velocity += rb.velocity * -0.25f;
         if (health <= 0)
         {
             //Destroy(GetComponent<pathfinding>().HighlightMap);

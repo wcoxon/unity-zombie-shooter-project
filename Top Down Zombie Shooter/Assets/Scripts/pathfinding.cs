@@ -115,12 +115,14 @@ public class pathfinding : MonoBehaviour
     public Stack<Vector3> path;
     public GameObject target;
     public Vector3 targetpos;
+    public Rigidbody2D rb;
     //Stack<Cell> path;
     //public GameObject pf;
     //pathfindingfunction pf;
     //public Vector3 next;
     // Start is called before the first frame update
     public zombiescript zs;
+    //Vector2 velocity;
     /*void Start()
     {
         path = new Stack<Vector3>();
@@ -143,14 +145,28 @@ public class pathfinding : MonoBehaviour
     {
         next = GameObject.Find("pathfinder").GetComponent<pathfindingfunction>().nextTileTowards(transform.position, target.transform.position, WallMap.GetComponent<Tilemap>());
     }*/
+    float normalise(float x, float y)
+    {
+        if (x == 0)
+        {
+            return 0;
+        }
+        return x / Mathf.Pow(x * x + y * y, 0.5f);
+    }
+    public Vector2 normalise(Vector2 vector)
+    {
+        return new Vector2(normalise(vector.x, vector.y), normalise(vector.y, vector.x));
+    }
     void OnEnable()
     {
+        // rb = GetComponent<Rigidbody2D>();
         //pf = GameObject.Find("pathfinder");
         //Debug.Log(GetComponent<zombiescript>().WaveScript.wave);
         //zs.WaveScript.pf
         //pf = GetComponent<zombiescript>().WaveScript.pf;
 
         //WallMap = GameObject.Find("Walls");
+        //velocity = new Vector2(0, 0);
         WallMap = GetComponent<zombiescript>().WaveScript.WallMap;
 
         target = GameObject.Find("player");
@@ -158,7 +174,16 @@ public class pathfinding : MonoBehaviour
         path = zs.WaveScript.pf.GetComponent<pathfindingfunction>().path(transform.position, target.transform.position, WallMap.GetComponent<Tilemap>());
 
     }
-
+    
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        //Debug.Log("collided");
+        if (other.gameObject.tag == "Zombie")
+        {
+            Debug.Log("collided");
+            transform.position -= (Vector3)normalise((Vector2)other.transform.position - (Vector2)transform.position)*(1-Vector3.Magnitude(other.transform.position- transform.position));
+        }
+    }
     void FixedUpdate()
     {
         
@@ -166,6 +191,7 @@ public class pathfinding : MonoBehaviour
         {
             updatenext();
         }*/
+
         if(WallMap.WorldToCell(target.transform.position) != WallMap.WorldToCell(targetpos))
         {
             //Debug.Log("moved");
@@ -173,13 +199,29 @@ public class pathfinding : MonoBehaviour
             path = zs.WaveScript.pf.path(transform.position, target.transform.position, WallMap);
 
         }
-        if (transform.position == path.Peek()&&path.Count>1)
+        if (WallMap.WorldToCell(transform.position) == WallMap.WorldToCell(path.Peek())&&path.Count>1)
         {
             path.Pop();
         }
-        transform.position = Vector3.MoveTowards(transform.position,path.Peek(), 5 * Time.deltaTime);
+        //rb.MovePosition(Vector3.MoveTowards(transform.position, path.Peek(), 5 * Time.deltaTime));
+        //transform.position = Vector3.MoveTowards(transform.position,path.Peek(), 5 * Time.deltaTime);
+        //velocity = normalise(path.Peek() - transform.position)*5;
+        //rb.MovePosition(Vector3.MoveTowards(transform.position, path.Peek(), 5 * Time.deltaTime));
 
+        //rb.velocity += normalise(path.Peek() - transform.position) * 50 * Time.fixedDeltaTime;
+
+        //rb.velocity = normalise(rb.velocity) * Mathf.Min(rb.velocity.magnitude, 5);
         
+            //rb.AddForce(normalise(path.Peek() - transform.position)*20);
+        rb.velocity += normalise(path.Peek() - transform.position) * 50 * Time.fixedDeltaTime;
+        
+        //rb.velocity += rb.velocity * -0.25f;
+        rb.velocity = normalise(rb.velocity) * Mathf.Min(rb.velocity.magnitude, 5);
+        //rb.AddForce(rb.velocity * -0.25f);
+
+        //rb.velocity = normalise(path.Peek() - transform.position)*5;
+
+
 
     }
 }

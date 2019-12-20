@@ -20,6 +20,13 @@ public class waves : MonoBehaviour
         
         pool = new Stack<GameObject>();
     }
+    public void clearZombies()
+    {
+        foreach (Transform child in transform)///////////
+        {
+            Destroy(child.gameObject);
+        }
+    }
     public void spawnzombies(int number)
     {
         int instantiate = Mathf.Max(number - pool.Count,0);
@@ -50,7 +57,7 @@ public class waves : MonoBehaviour
         WaveIndicator.text = "wave: " + wave;
         if (pool.Count == transform.childCount)
         {
-            Debug.Log("new wave");
+            //Debug.Log("new wave");
             wave += 1;
             spawnzombies(wave);
         }
