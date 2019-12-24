@@ -108,7 +108,9 @@ public class pathfinding : MonoBehaviour
     // public List<Cell> OpenCells;
     //public GameObject HighlightMap;
     //public GameObject WallMap;
+    
     Tilemap WallMap;
+    //TilemapCollider2D WallCol;
     //public Tile RedHighlightTile;
     //public Tile GreenHighlightTile;
     //public Tile BlueHighlightTile;
@@ -122,6 +124,8 @@ public class pathfinding : MonoBehaviour
     //public Vector3 next;
     // Start is called before the first frame update
     public zombiescript zs;
+    float attacktimer;
+    
     //Vector2 velocity;
     /*void Start()
     {
@@ -159,6 +163,7 @@ public class pathfinding : MonoBehaviour
     }
     void OnEnable()
     {
+        attacktimer = 0;
         // rb = GetComponent<Rigidbody2D>();
         //pf = GameObject.Find("pathfinder");
         //Debug.Log(GetComponent<zombiescript>().WaveScript.wave);
@@ -167,6 +172,7 @@ public class pathfinding : MonoBehaviour
 
         //WallMap = GameObject.Find("Walls");
         //velocity = new Vector2(0, 0);
+        //WallCol = GetComponent<zombiescript>().WaveScript.WallCol;
         WallMap = GetComponent<zombiescript>().WaveScript.WallMap;
 
         target = GameObject.Find("player");
@@ -186,7 +192,13 @@ public class pathfinding : MonoBehaviour
     }
     void FixedUpdate()
     {
-        
+
+        /*if (zs.coll.IsTouching(WallCol))
+        {
+            //zs.coll.
+            Debug.Log("test");
+
+        }*/
         /*if(transform.position == next)
         {
             updatenext();
@@ -197,7 +209,6 @@ public class pathfinding : MonoBehaviour
             //Debug.Log("moved");
             targetpos = target.transform.position;
             path = zs.WaveScript.pf.path(transform.position, target.transform.position, WallMap);
-
         }
         if (WallMap.WorldToCell(transform.position) == WallMap.WorldToCell(path.Peek())&&path.Count>1)
         {
@@ -211,14 +222,38 @@ public class pathfinding : MonoBehaviour
         //rb.velocity += normalise(path.Peek() - transform.position) * 50 * Time.fixedDeltaTime;
 
         //rb.velocity = normalise(rb.velocity) * Mathf.Min(rb.velocity.magnitude, 5);
-        
-            //rb.AddForce(normalise(path.Peek() - transform.position)*20);
-        rb.velocity += normalise(path.Peek() - transform.position) * 50 * Time.fixedDeltaTime;
-        
-        //rb.velocity += rb.velocity * -0.25f;
-        rb.velocity = normalise(rb.velocity) * Mathf.Min(rb.velocity.magnitude, 5);
-        //rb.AddForce(rb.velocity * -0.25f);
 
+        //rb.AddForce(normalise(path.Peek() - transform.position)*20);
+        //accelerate
+        if (rb.velocity.magnitude > 1)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(rb.velocity.y, rb.velocity.x) * 180 / Mathf.PI - 90);
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(target.transform.position.y-transform.position.y, target.transform.position.x - transform.position.x) * 180 / Mathf.PI - 90);
+        }
+        if (Vector3.SqrMagnitude(transform.position - target.transform.position) > 2)
+        {
+            attacktimer = 0;
+
+            rb.velocity += normalise(path.Peek() - transform.position) * 50 * Time.fixedDeltaTime;
+
+            //rb.velocity += rb.velocity * -0.25f;
+            //limit velocity to 5
+            rb.velocity = normalise(rb.velocity) * Mathf.Min(rb.velocity.magnitude, 5);
+            //rb.AddForce(rb.velocity * -0.25f);
+        }
+        else
+        {
+            attacktimer += Time.fixedDeltaTime;
+            if (attacktimer >= 0.75f)
+            {
+                zs.WaveScript.ps.health -= 35;
+                zs.animator.SetTrigger("Attack");
+                attacktimer = 0;
+            }
+        }
         //rb.velocity = normalise(path.Peek() - transform.position)*5;
 
 

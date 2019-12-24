@@ -68,6 +68,7 @@
     <Compile Include="Assets\Scripts\pathfinding.cs" />
     <Compile Include="Assets\Scripts\pathfindingfunction.cs" />
     <Compile Include="Assets\Scripts\playerscript.cs" />
+    <Compile Include="Assets\Scripts\PointsSystem.cs" />
     <Compile Include="Assets\Scripts\waves.cs" />
     <Compile Include="Assets\Scripts\zombiescript.cs" />
     <Reference Include="Unity.Timeline.Editor">

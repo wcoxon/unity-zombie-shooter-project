@@ -25,15 +25,19 @@ public class Gun
 
 public class guns : MonoBehaviour
 {
-    Stack<GameObject> bullets;
+    public Stack<GameObject> bulletPool;
     public GameObject bullet;
     public Gun machinegun;
     public float nextFire;
     Gun pistol;
-    Gun equipped;
+    public Gun equipped;
     public GameObject filled;
     //public float[] gunstuff = { 0, 0, 0, 0, 0, 0, 0 };
+    //public GameObject FirePoint;
     public Vector3 bulletoffset;
+    public Transform Bullets;
+    public playerscript ps;
+    public bulletscript bs;
     //public Gun equipped;
     // Start is called before the first frame update
     void Start()
@@ -43,25 +47,53 @@ public class guns : MonoBehaviour
         machinegun = new Gun(15, 5, 30, 19,3,1,5);
         pistol = new Gun(100, 100, 100, 10, 100, 5, 10);
         equipped = machinegun;
+        bs = bullet.GetComponent<bulletscript>();
+        bulletPool = new Stack<GameObject>();
+        //bs = new bulletscript();
+        //bs.speed = 
         //pistol = new Gun(gunstuff[0], gunstuff[1], gunstuff[2], gunstuff[3], gunstuff[4], (int)gunstuff[5],gunstuff[6]);
         //equipped = pistol;
     }
+    
     void shoot(Gun gun)
     {
-        GameObject _bullet;
+        //GameObject _bullet;
+        //bulletscript _bs;
+        //_bs = new bulletscript(gun.Speed,gameObject,gun.Range,gun.Damage);
+        //_bs.speed =
         if (nextFire < Time.time)
         {
-            
+            bs.set(gun.Speed, gameObject, gun.Range, gun.Damage);
+            //_bs = new bulletscript(gun.Speed, gameObject, gun.Range, gun.Damage);
             nextFire = Time.time + 1 / gun.FireRate;
-            GetComponent<playerscript>().velocity -= GetComponent<playerscript>().normalise(GetComponent<playerscript>().aimvector) * gun.Recoil;
+            //GetComponent<playerscript>().velocity -= GetComponent<playerscript>().normalise(GetComponent<playerscript>().aimvector) * gun.Recoil;
+            ps.velocity -= ps.normalise(ps.aimvector) * gun.Recoil;
+            /*if (bulletPool.Count >= gun.Bullets)
+            {
+                for (int x = 0; x < gun.Bullets; x++)
+                {
+                    bulletPool.Peek().transform.position = gameObject.transform.GetChild(0).transform.position;
+                    bulletPool.Peek().transform.rotation = Quaternion.Euler(0, 0, transform.eulerAngles.z + Random.Range(-gun.Spread / 2, gun.Spread / 2));
+                    bulletPool.Peek().SetActive(true);
+                }
+            }*/
             for (int x = 0; x < gun.Bullets; x++)
             {
-                _bullet = Instantiate(bullet, gameObject.transform.GetChild(0).transform.position, Quaternion.Euler(0, 0, transform.eulerAngles.z + Random.Range(-gun.Spread / 2, gun.Spread / 2)), GameObject.Find("Bullets").transform);
-                
-                _bullet.GetComponent<bulletscript>().speed = gun.Speed;
-                _bullet.GetComponent<bulletscript>().parent = gameObject;
-                _bullet.GetComponent<bulletscript>().range = gun.Range;
-                _bullet.GetComponent<bulletscript>().damage = gun.Damage;
+                //_bullet = Instantiate(bullet, gameObject.transform.GetChild(0).transform.position, Quaternion.Euler(0, 0, transform.eulerAngles.z + Random.Range(-gun.Spread / 2, gun.Spread / 2)), Bullets);
+                if (bulletPool.Count >= 1)
+                {
+                    bulletPool.Peek().transform.position = gameObject.transform.GetChild(0).transform.position;
+                    bulletPool.Peek().transform.rotation = Quaternion.Euler(0, 0, transform.eulerAngles.z + Random.Range(-gun.Spread / 2, gun.Spread / 2));
+                    bulletPool.Pop().SetActive(true);
+                }
+                else
+                {
+                    Instantiate(bullet, gameObject.transform.GetChild(0).transform.position, Quaternion.Euler(0, 0, transform.eulerAngles.z + Random.Range(-gun.Spread / 2, gun.Spread / 2)), Bullets);
+                }
+                //_bullet.GetComponent<bulletscript>() = _bs;
+                //_bullet.GetComponent<bulletscript>().parent = gameObject;
+                //_bullet.GetComponent<bulletscript>().range = gun.Range;
+                //_bullet.GetComponent<bulletscript>().damage = gun.Damage;
 
             }
         }

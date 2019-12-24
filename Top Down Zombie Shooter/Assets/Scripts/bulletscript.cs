@@ -4,11 +4,23 @@ using UnityEngine;
 
 public class bulletscript : MonoBehaviour
 {
+
+
     public float speed = 0.0f;
     public GameObject parent;
     public Vector3 startPosition;
     public float range = 0.0f;
     public float damage = 0.0f;
+    public Gun gun;
+    public guns gs;
+    
+    public void set(float _speed,GameObject _parent,float _range,float _damage)
+    {
+        speed = _speed;
+        parent = _parent;
+        range = _range;
+        damage = _damage;
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -16,7 +28,14 @@ public class bulletscript : MonoBehaviour
 
         //speed = 0.1f;
     }
-
+    private void OnEnable()
+    {
+        parent = GameObject.Find("player");
+        gs = parent.GetComponent<guns>();
+        gun = gs.equipped;
+        set(gun.Speed, parent, gun.Range, gun.Range);
+        //set(
+    }
     private void OnTriggerEnter2D(Collider2D other)
     {
         //Debug.Log("collided");
@@ -29,7 +48,9 @@ public class bulletscript : MonoBehaviour
         }
         if(other.gameObject.tag == "Wall"||other.gameObject.tag == "Zombie")
         {
-            Destroy(gameObject);
+            gs.bulletPool.Push(gameObject);
+            gameObject.SetActive(false);
+            //Destroy(gameObject);
         }
         /*if (other.gameObject != parent && !other.isTrigger)
         {
@@ -48,7 +69,9 @@ public class bulletscript : MonoBehaviour
         else
         {
             //Destroy(GetComponent<pathfinding>().HighlightMap);
-            Destroy(gameObject);
+            gs.bulletPool.Push(gameObject);
+            gameObject.SetActive(false);
+            //Destroy(gameObject);
         }
     }
 }

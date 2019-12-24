@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: -3842155721804243260}
   - component: {fileID: -2093096932032593872}
   - component: {fileID: -2812276363623509043}
+  - component: {fileID: -3462394793299470506}
   - component: {fileID: 8916140069898727076}
   m_Layer: 0
   m_Name: zombie
@@ -73,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: -1456860421
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: e330320ba867db843a6cec6b04d521d9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 021222687e8ff6d4aab8571067308516, type: 3}
   m_Color: {r: 0.2012282, g: 0.3584906, b: 0.2332377, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -98,7 +99,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   WaveScript: {fileID: 0}
+  coll: {fileID: -2812276363623509043}
   rb: {fileID: 8916140069898727076}
+  animator: {fileID: -3462394793299470506}
 --- !u!114 &-2093096932032593872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,6 +118,7 @@ MonoBehaviour:
   targetpos: {x: 0, y: 0, z: 0}
   rb: {fileID: 8916140069898727076}
   zs: {fileID: -3842155721804243260}
+  animator: {fileID: -3462394793299470506}
 --- !u!58 &-2812276363623509043
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -131,6 +135,25 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!95 &-3462394793299470506
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3003262639003547679}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ebd8d83805160cd45b47e1068c88ee03, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!50 &8916140069898727076
 Rigidbody2D:
   serializedVersion: 4
