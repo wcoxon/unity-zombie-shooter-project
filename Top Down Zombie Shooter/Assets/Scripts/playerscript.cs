@@ -15,6 +15,7 @@ public class playerscript : MonoBehaviour
     public Vector2 wallNormal;
     public Rigidbody2D rb;
     public UnityEngine.UI.Text HealthIndicator;
+    public Pickups pickupsScript;
     // Start is called before the first frame update
     void Start()
     {
@@ -48,6 +49,7 @@ public class playerscript : MonoBehaviour
             health -= 5;
         }*/
         //Debug.Log("hit");
+        
         wallNormal = new Vector2(0, 0);
         for (int x = 0; x < collision.contacts.Length; x++)
         {
@@ -79,8 +81,9 @@ public class playerscript : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
+       
         //Debug.Log("trig");
-        if(collision.tag == "Water"|| collision.tag == "Zombie")
+        if (collision.tag == "Water"|| collision.tag == "Zombie")
         {
             maxspeed = 5f;
         }
@@ -100,6 +103,11 @@ public class playerscript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+
+
+
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             waveScript.incrementWave();

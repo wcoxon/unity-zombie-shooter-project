@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\guns.cs" />
     <Compile Include="Assets\Scripts\pathfinding.cs" />
     <Compile Include="Assets\Scripts\pathfindingfunction.cs" />
+    <Compile Include="Assets\Scripts\Pickups.cs" />
     <Compile Include="Assets\Scripts\playerscript.cs" />
     <Compile Include="Assets\Scripts\PointsSystem.cs" />
     <Compile Include="Assets\Scripts\waves.cs" />

@@ -7,6 +7,8 @@ TagManager:
   - Zombie
   - Water
   - Wall
+  - Bullet
+  - Ammo
   layers:
   - Default
   - TransparentFX

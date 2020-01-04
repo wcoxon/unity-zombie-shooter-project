@@ -13,13 +13,14 @@ public class bulletscript : MonoBehaviour
     public float damage = 0.0f;
     public Gun gun;
     public guns gs;
-    
-    public void set(float _speed,GameObject _parent,float _range,float _damage)
+    float knockback;
+    public void set(float _speed,GameObject _parent,float _range,float _damage,float _knockback)
     {
         speed = _speed;
         parent = _parent;
         range = _range;
         damage = _damage;
+        knockback = _knockback;
     }
     // Start is called before the first frame update
     void Start()
@@ -33,7 +34,9 @@ public class bulletscript : MonoBehaviour
         parent = GameObject.Find("player");
         gs = parent.GetComponent<guns>();
         gun = gs.equipped;
-        set(gun.Speed, parent, gun.Range, gun.Range);
+        startPosition = startPosition = transform.position;
+        set(gun.Speed, parent, gun.Range, gun.Damage,gun.Knockback);
+
         //set(
     }
     private void OnTriggerEnter2D(Collider2D other)
@@ -43,11 +46,13 @@ public class bulletscript : MonoBehaviour
         {
             //Debug.Log("collided");
             //other.attachedRigidbody.velocity -= new Vector2(Mathf.Cos(transform.rotation.z * Mathf.PI / 180), Mathf.Sin(transform.rotation.z * Mathf.PI / 180))*5;
-            other.attachedRigidbody.velocity = new Vector2(Mathf.Cos(transform.eulerAngles.z * Mathf.PI / 180+90), Mathf.Sin(transform.eulerAngles.z * Mathf.PI / 180+90))*5;
+            other.attachedRigidbody.velocity = new Vector2(Mathf.Cos(transform.eulerAngles.z * Mathf.PI / 180+90), Mathf.Sin(transform.eulerAngles.z * Mathf.PI / 180+90))*knockback;
+            //Debug.Log(damage);
             other.gameObject.GetComponent<zombiescript>().health -= damage;
         }
         if(other.gameObject.tag == "Wall"||other.gameObject.tag == "Zombie")
         {
+            //Debug.Log("Funck");
             gs.bulletPool.Push(gameObject);
             gameObject.SetActive(false);
             //Destroy(gameObject);
@@ -61,6 +66,7 @@ public class bulletscript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         if (new Vector2(transform.position.x - startPosition.x, transform.position.y - startPosition.y).magnitude < range)
         {
             transform.Translate(new Vector2(0, speed * Time.deltaTime));
