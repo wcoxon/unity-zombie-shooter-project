@@ -16,18 +16,25 @@ public class waves : MonoBehaviour
     public UnityEngine.Tilemaps.Tilemap WallMap;
     public UnityEngine.Tilemaps.TilemapCollider2D WallCol;
     public playerscript ps;
+    public guns gs;
     public GameObject zombie;
     //public GameObject spawners;
     public Stack<GameObject> pool;
     public UnityEngine.UI.Text WaveIndicator;
     public UnityEngine.UI.Text EnterPrompt;
-    Vector2 cameraDimensions;
+    public UnityEngine.UI.Text upgradeMessage;
+    public Vector2 cameraDimensions;
+    public GameObject upgrader;
+    
+    public float upgradeCounter;
+    IEnumerator IndefiniteSpawner;
+    //bool wavebreak;
     // Start is called before the first frame update
     void Start()
     {
         cameraDimensions = new Vector2( 2 * Camera.main.orthographicSize * Screen.width / Screen.height,2*Camera.main.orthographicSize);
         //ammoCounter = 0;
-        EnterPrompt.rectTransform.anchoredPosition = 250 * Vector3.down;
+        //EnterPrompt.rectTransform.anchoredPosition = 250 * Vector3.down;
         pool = new Stack<GameObject>();
     }
     public void clearZombies()
@@ -118,13 +125,48 @@ public class waves : MonoBehaviour
 
         }
     }*/
-    /*public Vector3 randomEmpty()
+    
+    public Vector3 randomEmpty()
     {
         Vector3Int x;
         for (x = new Vector3Int(Random.Range(-16, 16), Random.Range(-16, 16), 0); WallMap.HasTile(x); x = new Vector3Int(Random.Range(-16, 16), Random.Range(-16, 16), 0));
         return Zone.GetCellCenterWorld(x);
         
-    }*/
+    }
+    public void spawnZombie()
+    {
+        cameraDimensions = new Vector2(2 * Camera.main.orthographicSize * Screen.width / Screen.height, 2 * Camera.main.orthographicSize);
+        if (pool.Count > 0)
+        {
+            //pool.Peek().transform.localScale = new Vector3(1, 1, 1);
+            //pool.Peek().transform.SetParent(transform);
+            //pool.Peek().transform.position = spawners.transform.GetChild(Random.Range(0, spawners.transform.childCount)).transform.position + Random.Range(-.25f, .25f) * new Vector3(1, 1, 0);
+            pool.Peek().transform.position = squareAroundPlayer(cameraDimensions + new Vector2(2, 2));
+            //pool.Peek().GetComponent<CircleCollider2D>().enabled = true;
+            //pool.Pop().GetComponent<pathfinding>().enabled = true;
+            //pool.Peek().
+            pool.Pop().SetActive(true);
+
+        }
+        else
+        {
+            Instantiate(zombie, squareAroundPlayer(cameraDimensions + new Vector2(2, 2)), Quaternion.Euler(0, 0, 0), transform);
+        }
+    }
+    public IEnumerator SpawnZombiesIndefinitely(float interval)
+    {
+        
+        upgradeCounter = 0;
+        while (upgradeCounter<wave*2+1)
+        {
+            if (transform.childCount - pool.Count <= wave+2)
+            {
+                spawnZombie();
+            }
+            yield return new WaitForSeconds(interval);
+        }
+        yield break;
+    }
     public IEnumerator SpawnZombies(int number,float interval)
     {
         cameraDimensions = new Vector2(2 * Camera.main.orthographicSize * Screen.width / Screen.height, 2 * Camera.main.orthographicSize);
@@ -147,12 +189,13 @@ public class waves : MonoBehaviour
         }
         for (int x = 0; x < reuse; x++)
         {
-            pool.Peek().transform.localScale = new Vector3(1, 1, 1);
-            pool.Peek().transform.SetParent(transform);
+            //pool.Peek().transform.localScale = new Vector3(1, 1, 1);
+            //pool.Peek().transform.SetParent(transform);
             //pool.Peek().transform.position = spawners.transform.GetChild(Random.Range(0, spawners.transform.childCount)).transform.position + Random.Range(-.25f, .25f) * new Vector3(1, 1, 0);
             pool.Peek().transform.position = squareAroundPlayer(cameraDimensions + new Vector2(2, 2));
-            pool.Peek().GetComponent<CircleCollider2D>().enabled = true;
-            pool.Pop().GetComponent<pathfinding>().enabled = true;
+            //pool.Peek().GetComponent<CircleCollider2D>().enabled = true;
+            //pool.Pop().GetComponent<pathfinding>().enabled = true;
+            pool.Pop().SetActive(true);
             yield return new WaitForSeconds(interval);
             //pool.Pop().SetActive(true);
 
@@ -163,17 +206,134 @@ public class waves : MonoBehaviour
     {
         if (pool.Count == transform.childCount)
         {
+            //WaveIndicator.text = "wave: " + wave;
+            upgradeCounter = 0;
+            upgrader.transform.GetChild(0).localScale = new Vector3(0, 0, 0);
+            upgrader.SetActive(true);
+            upgrader.transform.position = randomEmpty();
+            //upgradeCounter = 0;
             //EnterPrompt.rectTransform.anchoredPosition = new Vector3(0,-300,0);
-            //EnterPrompt.enabled = false;
+            EnterPrompt.enabled = false;
+            upgradeMessage.enabled = false;
             //Debug.Log("new wave");
             wave += 1;
-            StartCoroutine(SpawnZombies(wave, 0.5f));
+            
+            IndefiniteSpawner = SpawnZombiesIndefinitely(5 / wave);
+            WaveIndicator.text = "wave: " + wave;
+            //StartCoroutine(SpawnZombies(wave, 0.5f));
+            //StartCoroutine(SpawnZombiesIndefinitely(5/wave));
+            StartCoroutine(IndefiniteSpawner);
             //spawnzombies(wave);
         }
+    }
+    public void EndWave()
+    {
+        EnterPrompt.enabled = true;
+        //upgradeMessage.enabled = true;
+        //upgrader.transform.GetChild(0).localScale = new Vector3(0, 0, 0);
+        upgrader.SetActive(false);
+        StopAllCoroutines();
+        switch (Random.Range(0, 9))
+        {
+            case 0:
+                gs.equipped.FireRate += 5;
+                Debug.Log("firerate");
+                upgradeMessage.text = "firing rate increased!";
+                break;
+            case 1:
+                gs.equipped.Spread /= 1.5f;
+                Debug.Log("spread");
+                upgradeMessage.text = "accuracy improved!";
+                break;
+            case 2:
+                gs.equipped.Speed += 5;
+                Debug.Log("speed");
+                upgradeMessage.text = "Bullet velocity increased!";
+                break;
+            case 3:
+                gs.equipped.Recoil /= 2;
+                Debug.Log("recoil");
+                upgradeMessage.text = "Recoil reduced!";
+                break;
+            case 4:
+                gs.equipped.Bullets += 1;
+                Debug.Log("bullets");
+                upgradeMessage.text = "Multi-shot!";
+                break;
+            case 5:
+                gs.equipped.Damage += 15;
+                Debug.Log("dam");
+                upgradeMessage.text = "Bullet damage increased!";
+                break;
+            case 6:
+                gs.equipped.ClipSize += 8;
+                Debug.Log("clip");
+                upgradeMessage.text = "Magazine size increased!";
+                break;
+            case 7:
+                gs.equipped.Knockback += 7;
+                Debug.Log("nok");
+                upgradeMessage.text = "bullet knockback increased!";
+                break;
+            case 8:
+                gs.equipped.ReloadTime /= 1.5f;
+                Debug.Log("time");
+                upgradeMessage.text = "reload shortened!";
+                break;
+
+
+        }
+        upgradeMessage.enabled = true;
+        //gs.equipped.Bullets +=1;
+        gs.equipped.Spread = (gs.equipped.Bullets-1)*15;
     }
     // Update is called once per frame
     void Update()
     {
+        //GameObject.Find("GameObject").transform.position = (Vector2)Camera.main.transform.position;
+        //GameObject.Find("GameObject").transform.localScale = new Vector2(1, 1);// cameraDimensions-new Vector2(2,2);
+        if (upgrader.activeSelf && upgradeCounter >= wave*2+1)
+        {
+            //EnterPrompt.enabled = true;
+            /*if (pool.Count < transform.childCount)
+            {
+                EnterPrompt.text = "fight off/evade the remaining zombies";
+            }*/
+            //else
+            //{
+            if (pool.Count == transform.childCount)
+            {
+                EndWave();
+            }
+            //}
+
+        }
+        else if(Vector3.Distance(ps.transform.position, upgrader.transform.position) <= 2.5f)
+        {
+            upgradeCounter += Time.deltaTime;
+            upgrader.transform.GetChild(0).localScale = new Vector3(upgradeCounter / (wave * 2 + 1), upgradeCounter / (wave * 2 + 1), 0);
+
+        }
+        /*if (upgrader.activeSelf&&Vector3.Distance(ps.transform.position, upgrader.transform.position)<=2.5f)
+        {
+            upgradeCounter += Time.deltaTime;
+
+            if (upgradeCounter >= 3)
+            {
+                EndWave();
+                
+            }
+        }*/
+        /*if (upgradeCounter >= 3)
+        {
+            EndWave();
+            //StopCoroutine("SpawnZombiesIndefinitely");
+            //EnterPrompt.enabled = true;
+            //upgrader.SetActive(false);
+            //StopAllCoroutines();
+            //upgradeCounter = 0;
+            //gs.equipped.Bullets += 1;
+        }*/
         /*ammoCounter += Time.deltaTime;
         if (ammoCounter >= 0.5)
         {
@@ -187,9 +347,10 @@ public class waves : MonoBehaviour
         //Highlighter.ClearAllTiles();
         //squareAroundPlayer(cameraDimensions + new Vector2(2, 2));
         //GameObject.Find("wave").GetComponent<UnityEngine.UI.Text>().text = "wave: " + wave;
-        WaveIndicator.text = "wave: " + wave;
-        if (pool.Count == transform.childCount)
+        //WaveIndicator.text = "wave: " + wave;
+        /*if (pool.Count == transform.childCount)
         {
+            
             EnterPrompt.enabled = true;
             /*if (Mathf.FloorToInt(EnterPrompt.rectTransform.anchoredPosition.y) != -250)
             {*/
@@ -201,13 +362,13 @@ public class waves : MonoBehaviour
             //wave += 1;
             //StartCoroutine(Spawnz(wave,0.5f));
             //spawnzombies(wave);
-        }
-        else {
+        //}
+        /*else {
             //EnterPrompt.rectTransform.anchoredPosition = new Vector3(0, EnterPrompt.rectTransform.anchoredPosition.y+(-250 - EnterPrompt.rectTransform.anchoredPosition.y) /3, 0);
             /*if (Mathf.FloorToInt(EnterPrompt.rectTransform.anchoredPosition.y) != -350)
             {*/
             //EnterPrompt.rectTransform.position += new Vector3(0, (-350 - EnterPrompt.rectTransform.anchoredPosition.y) / 3, 0);
             //}
-        }
+        //}
     }
 }

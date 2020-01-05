@@ -70,6 +70,7 @@
     <Compile Include="Assets\Scripts\Pickups.cs" />
     <Compile Include="Assets\Scripts\playerscript.cs" />
     <Compile Include="Assets\Scripts\PointsSystem.cs" />
+    <Compile Include="Assets\Scripts\upgraderScript.cs" />
     <Compile Include="Assets\Scripts\waves.cs" />
     <Compile Include="Assets\Scripts\zombiescript.cs" />
     <Reference Include="Unity.Timeline.Editor">

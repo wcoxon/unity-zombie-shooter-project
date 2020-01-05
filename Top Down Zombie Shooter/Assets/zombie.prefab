@@ -118,7 +118,6 @@ MonoBehaviour:
   targetpos: {x: 0, y: 0, z: 0}
   rb: {fileID: 8916140069898727076}
   zs: {fileID: -3842155721804243260}
-  animator: {fileID: -3462394793299470506}
 --- !u!58 &-2812276363623509043
 CircleCollider2D:
   m_ObjectHideFlags: 0

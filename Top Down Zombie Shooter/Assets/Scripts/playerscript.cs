@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using UnityEngine.SceneManagement;
+
 public class playerscript : MonoBehaviour
 {
     public Vector2 velocity;
@@ -15,12 +17,19 @@ public class playerscript : MonoBehaviour
     public Vector2 wallNormal;
     public Rigidbody2D rb;
     public UnityEngine.UI.Text HealthIndicator;
-    public Pickups pickupsScript;
+    public Pickups ammoScript;
+    public Pickups healthScript;
+    Vector3 cameraposition;
+    public RectTransform Healthbar;
+    public GameObject GameOver;
+    //public UnityEngine.UI.Button restart;
     // Start is called before the first frame update
     void Start()
     {
-        
         health = 100;
+        Healthbar.anchorMax = new Vector2(health / 100, 1);
+        HealthIndicator.text = "health: " + health;
+        cameraposition = new Vector3(0,0,0);
         wallNormal = new Vector2(0, 0);
         Cursor.visible = false;
         input = new Vector2(0, 0);
@@ -85,7 +94,7 @@ public class playerscript : MonoBehaviour
         //Debug.Log("trig");
         if (collision.tag == "Water"|| collision.tag == "Zombie")
         {
-            maxspeed = 5f;
+            maxspeed = 3f;
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
@@ -101,11 +110,12 @@ public class playerscript : MonoBehaviour
     }
     
     // Update is called once per frame
+    public void restartfunc()
+    {
+        SceneManager.LoadScene("SampleScene");
+    }
     void Update()
     {
-
-
-
 
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -113,14 +123,22 @@ public class playerscript : MonoBehaviour
             waveScript.incrementWave();
         }
         //GameObject.Find("health").GetComponent<UnityEngine.UI.Text>().text = "health: " + health;///////
-        HealthIndicator.text = "health: " + health;
+        //HealthIndicator.text = "health: " + health;
         if (health <= 0)
         {
-            health = 100;
-            transform.position = new Vector3(0, 0, 0);
+
+            //health = 100;
+            //transform.position = new Vector3(0, 0, 0);
             //GameObject.Find("Zombies").GetComponent<waves>().wave = 0;//////////
-            waveScript.wave = 0;
-            waveScript.clearZombies();
+            //waveScript.wave = 0;
+            //waveScript.clearZombies();
+            waveScript.gameObject.SetActive(false);
+            GameOver.SetActive(true);
+            Cursor.visible = true;
+            gameObject.SetActive(false);
+            //restart.onClick.AddListener( restartfunc());
+            //SceneManager.LoadScene("SampleScene");
+            //Application.LoadLevel(Application.loadedLevel);
             /*foreach (Transform child in GameObject.Find("Zombies").transform)///////////
             {
                 Destroy(child.gameObject);
@@ -179,11 +197,25 @@ public class playerscript : MonoBehaviour
         //pter.transform.position = transform.position+new Vector3(wallNormal.x,wallNormal.y);
         //pter.transform.position = new Vector3(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y, 0);
 
+        //cameraposition = Camera.main.transform.position;
         Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10.0f);
+
+        aimvector = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;// new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x - transform.position.x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y - transform.position.y);
+
+
+        transform.eulerAngles = new Vector3(0, 0, Mathf.Atan2(aimvector.y, aimvector.x) * 180 / Mathf.PI - 90.0f);
+
+        cameraposition = Vector3.MoveTowards((Vector2)cameraposition,normalise(aimvector) * aimvector.magnitude/3, Vector2.Distance(cameraposition, aimvector)*5*Time.deltaTime) + Vector3.forward * -10;// Vector2.Distance(Camera.main.transform.position,aimvector)) + Vector3.forward * -10;//new Vector3(transform.position.x + aimvector.x, transform.position.y + aimvector.y, -10);
+        Camera.main.transform.position = transform.position+cameraposition + Vector3.forward * -10;
+
+        pter.transform.position = new Vector3(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y, 0);
+
+        /*
         aimvector = Vector2.MoveTowards(aimvector,new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x - transform.position.x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y - transform.position.y),Time.deltaTime*20f*Vector3.Distance(aimvector, new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x - transform.position.x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y - transform.position.y)));
+        
         transform.eulerAngles = new Vector3(0, 0, Mathf.Atan2(aimvector.y, aimvector.x) * 180 / Mathf.PI - 90.0f);
         Camera.main.transform.position = new Vector3(transform.position.x+aimvector.x, transform.position.y+aimvector.y, -10);//new Vector3(transform.position.x / 2 + Camera.main.ScreenToWorldPoint(Input.mousePosition).x / 2, transform.position.y / 2 + Camera.main.ScreenToWorldPoint(Input.mousePosition).y / 2, -10.0f);
-        pter.transform.position = new Vector3(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y, 0);
+        pter.transform.position = new Vector3(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y, 0);*/
         //Debug.Log(pter.transform.position == transform.position);
     }
 }

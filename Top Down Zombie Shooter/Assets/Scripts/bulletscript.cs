@@ -34,7 +34,7 @@ public class bulletscript : MonoBehaviour
         parent = GameObject.Find("player");
         gs = parent.GetComponent<guns>();
         gun = gs.equipped;
-        startPosition = startPosition = transform.position;
+        startPosition = transform.position;
         set(gun.Speed, parent, gun.Range, gun.Damage,gun.Knockback);
 
         //set(
@@ -53,7 +53,10 @@ public class bulletscript : MonoBehaviour
         if(other.gameObject.tag == "Wall"||other.gameObject.tag == "Zombie")
         {
             //Debug.Log("Funck");
-            gs.bulletPool.Push(gameObject);
+            if (!gs.bulletPool.Contains(gameObject))
+            {
+                gs.bulletPool.Push(gameObject);
+            }
             gameObject.SetActive(false);
             //Destroy(gameObject);
         }
@@ -75,7 +78,10 @@ public class bulletscript : MonoBehaviour
         else
         {
             //Destroy(GetComponent<pathfinding>().HighlightMap);
-            gs.bulletPool.Push(gameObject);
+            if (!gs.bulletPool.Contains(gameObject))
+            {
+                gs.bulletPool.Push(gameObject);
+            }
             gameObject.SetActive(false);
             //Destroy(gameObject);
         }

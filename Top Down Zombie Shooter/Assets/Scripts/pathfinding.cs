@@ -184,9 +184,9 @@ public class pathfinding : MonoBehaviour
     private void OnTriggerStay2D(Collider2D other)
     {
         //Debug.Log("collided");
-        if (other.gameObject.tag == "Zombie")
+        if (other.gameObject.tag == "Zombie"&&!WallMap.HasTile(WallMap.WorldToCell(transform.position)))
         {
-            Debug.Log("collided");
+            //Debug.Log("collided");
             transform.position -= (Vector3)normalise((Vector2)other.transform.position - (Vector2)transform.position)*(1-Vector3.Magnitude(other.transform.position- transform.position));
         }
     }
@@ -203,13 +203,14 @@ public class pathfinding : MonoBehaviour
         {
             updatenext();
         }*/
-
-        if(WallMap.WorldToCell(target.transform.position) != WallMap.WorldToCell(targetpos))
+        //when player position changes update the path
+        if(WallMap.WorldToCell(target.transform.position) != WallMap.WorldToCell(targetpos)&& !WallMap.HasTile(WallMap.WorldToCell(transform.position)))
         {
             //Debug.Log("moved");
             targetpos = target.transform.position;
             path = zs.WaveScript.pf.path(transform.position, target.transform.position, WallMap);
         }
+        //when you stand on a node, remove it and focus on the next node in the stack, (unless there are no more nodes in the stack after the current one)
         if (WallMap.WorldToCell(transform.position) == WallMap.WorldToCell(path.Peek())&&path.Count>1)
         {
             path.Pop();
@@ -250,6 +251,8 @@ public class pathfinding : MonoBehaviour
             if (attacktimer >= 0.75f)
             {
                 zs.WaveScript.ps.health -= 35;
+                zs.WaveScript.ps.Healthbar.anchorMax = new Vector2(zs.WaveScript.ps.health / 100,1);
+                zs.WaveScript.ps.HealthIndicator.text = zs.WaveScript.ps.health + " HP";
                 zs.animator.SetTrigger("Attack");
                 attacktimer = 0;
             }

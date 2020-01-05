@@ -6,17 +6,24 @@ public class Pickups : MonoBehaviour
 {
     public UnityEngine.Tilemaps.Tilemap Zone;
     public UnityEngine.Tilemaps.Tilemap WallMap;
-    public float ammoCounter;
-    public GameObject ammo;
-    public Transform ammoParent;
-    public int ammoLimit;
-    public Stack<GameObject> ammoPool;
+    public float Counter;
+    public GameObject pickup;
+    public Transform Parent;
+    public int Limit;
+    public Stack<GameObject> Pool;
     public waves waveScript;
+    //public float healthCounter;
+    //public GameObject health;
+    //public Transform healthParent;
+    //public int healthLimit;
+   // public Stack<GameObject> healthPool;
     // Start is called before the first frame update
     void Start()
     {
-        ammoCounter = 0;
-        ammoPool = new Stack<GameObject>();
+       // healthCounter = 0;
+       // healthPool = new Stack<GameObject>();
+        Counter = 0;
+        Pool = new Stack<GameObject>();
     }
     public Vector3 randomEmpty()
     {
@@ -29,19 +36,34 @@ public class Pickups : MonoBehaviour
     void Update()
     {
 
-        ammoCounter += Time.deltaTime;
-        if (ammoCounter >= 1&&ammoParent.childCount-ammoPool.Count<ammoLimit&& waveScript.pool.Count < waveScript.transform.childCount)
+        Counter += Time.deltaTime;
+        if (Counter >= 1&&Parent.childCount-Pool.Count<Limit&& waveScript.pool.Count < waveScript.transform.childCount)
         {
-            if (ammoPool.Count > 0)
+            if (Pool.Count > 0)
             {
-                ammoPool.Peek().transform.position = randomEmpty();
-                ammoPool.Pop().SetActive(true);
+                Pool.Peek().transform.position = randomEmpty();
+                Pool.Pop().SetActive(true);
             }
             else
             {
-                Instantiate(ammo, randomEmpty(), Quaternion.Euler(0, 0, 0), ammoParent);
+                Instantiate(pickup, randomEmpty(), Quaternion.Euler(0, 0, 0), Parent);
             }
-            ammoCounter = 0;
+            Counter = 0;
         }
+        /*
+        healthCounter += Time.deltaTime;
+        if (healthCounter >= 1 && healthParent.childCount - healthPool.Count < healthLimit && waveScript.pool.Count < waveScript.transform.childCount)
+        {
+            if (healthPool.Count > 0)
+            {
+                healthPool.Peek().transform.position = randomEmpty();
+                healthPool.Pop().SetActive(true);
+            }
+            else
+            {
+                Instantiate(health, randomEmpty(), Quaternion.Euler(0, 0, 0), healthParent);
+            }
+            healthCounter = 0;
+        }*/
     }
 }
