@@ -15,21 +15,15 @@ public class zombiescript : MonoBehaviour
     //public GameObject Target;
     //public Vector2 velocity;
     // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-
-        //pfScript = GetComponent<pathfinding>();
-        //coll = GetComponent<CircleCollider2D>();
-        //pf = GameObject.Find("pathfinder");
         WaveScript = GameObject.Find("Zombies").GetComponent<waves>();
-        health = 100;
-        GetComponent<pathfinding>().enabled = true;
-        //velocity = new Vector2(0, 0);
     }
+    
     private void OnEnable()
     {
-        GetComponent<SpriteRenderer>().color = new Color(51, 91, 59);
-        health = 100;
+        //GetComponent<SpriteRenderer>().color = new Color(51, 91, 59);
+        health = 25+WaveScript.wave*10;
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -61,12 +55,20 @@ public class zombiescript : MonoBehaviour
         rb.velocity += rb.velocity * -0.25f;
         if (health <= 0)
         {
+
+            WaveScript.points += 1;
+            //Debug.Log((float)WaveScript.points / WaveScript.pointLimit);
+            WaveScript.PointsUI.text = "Points: " + WaveScript.points;
+            //WaveScript.PointsBar.anchorMax = new Vector2((float)WaveScript.points / WaveScript.pointLimit, 1);
+            //WaveScript.ps.points += 1;
+            //WaveScript.ps.PointsUI.text = "Points: " + WaveScript.ps.points;
             rb.velocity = new Vector2(0, 0);
             //Destroy(GetComponent<pathfinding>().HighlightMap);
             //Destroy(gameObject);
             //GameObject.Find("Zombies").GetComponent<waves>().pool.Push(gameObject);
             WaveScript.pool.Push(gameObject);
-            health = 100;
+            //Debug.Log(WaveScript.pool.Count);
+            //health = 100;
             //gameObject.GetComponent<pathfinding>().enabled = false;
             //gameObject.SetActive(false);
             //transform.localScale = new Vector3(0.5f,1,1);

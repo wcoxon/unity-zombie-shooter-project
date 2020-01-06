@@ -12,6 +12,7 @@ public class Pickups : MonoBehaviour
     public int Limit;
     public Stack<GameObject> Pool;
     public waves waveScript;
+    public float interval;
     //public float healthCounter;
     //public GameObject health;
     //public Transform healthParent;
@@ -35,20 +36,23 @@ public class Pickups : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        Counter += Time.deltaTime;
-        if (Counter >= 1&&Parent.childCount-Pool.Count<Limit&& waveScript.pool.Count < waveScript.transform.childCount)
+        if (Parent.childCount - Pool.Count < Limit)
         {
-            if (Pool.Count > 0)
+            Counter += Time.fixedDeltaTime;
+
+            if (Counter >= interval && waveScript.pool.Count < waveScript.transform.childCount)
             {
-                Pool.Peek().transform.position = randomEmpty();
-                Pool.Pop().SetActive(true);
+                if (Pool.Count > 0)
+                {
+                    Pool.Peek().transform.position = randomEmpty();
+                    Pool.Pop().SetActive(true);
+                }
+                else
+                {
+                    Instantiate(pickup, randomEmpty(), Quaternion.Euler(0, 0, 0), Parent);
+                }
+                Counter = 0;
             }
-            else
-            {
-                Instantiate(pickup, randomEmpty(), Quaternion.Euler(0, 0, 0), Parent);
-            }
-            Counter = 0;
         }
         /*
         healthCounter += Time.deltaTime;

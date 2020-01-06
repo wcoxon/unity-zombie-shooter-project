@@ -25,7 +25,7 @@ public class bulletscript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        startPosition = transform.position;
+        //startPosition = transform.position;
 
         //speed = 0.1f;
     }
@@ -67,12 +67,12 @@ public class bulletscript : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         
         if (new Vector2(transform.position.x - startPosition.x, transform.position.y - startPosition.y).magnitude < range)
         {
-            transform.Translate(new Vector2(0, speed * Time.deltaTime));
+            transform.Translate(new Vector2(0, speed * Time.fixedDeltaTime));
             //transform.Translate(new Vector2(0.5f*Mathf.Sin(2*Vector3.Distance(transform.position, startPosition)), speed * Time.deltaTime)); ;
         }
         else

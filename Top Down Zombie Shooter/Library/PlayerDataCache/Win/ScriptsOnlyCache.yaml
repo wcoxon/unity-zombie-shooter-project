@@ -1,10 +1,13 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
+    - Pickups
     - bulletscript
     - guns
     - pathfinding
+    - pathfindingfunction
     - playerscript
+    - upgraderScript
     - waves
     - zombiescript
     Unity.2D.Tilemap.Editor.dll:
@@ -29,8 +32,10 @@ ScriptsOnlyBuild:
     UnityEngine.UI.dll:
     - UnityEngine.EventSystems.EventSystem
     - UnityEngine.EventSystems.StandaloneInputModule
+    - UnityEngine.UI.Button
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.GraphicRaycaster
+    - UnityEngine.UI.Image
     - UnityEngine.UI.Text
   sceneClasses:
     Assets/Scenes/SampleScene.unity:
@@ -50,7 +55,15 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 58
       Script: {instanceID: 0}
+    - Class: 61
+      Script: {instanceID: 0}
+    - Class: 74
+      Script: {instanceID: 0}
     - Class: 81
+      Script: {instanceID: 0}
+    - Class: 91
+      Script: {instanceID: 0}
+    - Class: 95
       Script: {instanceID: 0}
     - Class: 104
       Script: {instanceID: 0}
@@ -59,25 +72,35 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 9660}
     - Class: 114
-      Script: {instanceID: 9796}
+      Script: {instanceID: 9722}
     - Class: 114
-      Script: {instanceID: 9824}
+      Script: {instanceID: 9750}
     - Class: 114
-      Script: {instanceID: 10262}
+      Script: {instanceID: 9800}
     - Class: 114
-      Script: {instanceID: 10670}
+      Script: {instanceID: 9828}
     - Class: 114
-      Script: {instanceID: 10870}
+      Script: {instanceID: 9868}
+    - Class: 114
+      Script: {instanceID: 10266}
+    - Class: 114
+      Script: {instanceID: 10634}
+    - Class: 114
+      Script: {instanceID: 10676}
+    - Class: 114
+      Script: {instanceID: 10876}
+    - Class: 114
+      Script: {instanceID: 10990}
     - Class: 114
       Script: {instanceID: 11104}
     - Class: 114
-      Script: {instanceID: 11196}
+      Script: {instanceID: 11114}
     - Class: 114
-      Script: {instanceID: 11476}
+      Script: {instanceID: 11192}
     - Class: 114
-      Script: {instanceID: 13060}
+      Script: {instanceID: 11208}
     - Class: 114
-      Script: {instanceID: 23466}
+      Script: {instanceID: 11488}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -129,6 +152,18 @@ ScriptsOnlyBuild:
     className: TMP_Dropdown
   - hash:
       serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: upgraderScript
+  - hash:
+      serializedVersion: 2
+      Hash: 45b66ec0b2cc14c9563f6bfd2ab151da
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Pickups
+  - hash:
+      serializedVersion: 2
       Hash: e7a73f5f78ba6445195ec23b74a1ce2d
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
@@ -141,7 +176,7 @@ ScriptsOnlyBuild:
     className: GroupTrack
   - hash:
       serializedVersion: 2
-      Hash: c4e17c1f6352497cc7f8ce6fe59ea046
+      Hash: c45756b434e0e9618cb3a85015b12241
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: zombiescript
@@ -315,6 +350,12 @@ ScriptsOnlyBuild:
     className: SignalTrack
   - hash:
       serializedVersion: 2
+      Hash: a919cc31e8704742b240d51d0f90c022
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: PointsSystem
+  - hash:
+      serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
@@ -345,7 +386,7 @@ ScriptsOnlyBuild:
     className: RawImage
   - hash:
       serializedVersion: 2
-      Hash: f1f41c35592536a99b4fdf49445735c1
+      Hash: b2d37b67c76c1a0eb1fb56a6fd8d15f1
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: guns
@@ -393,7 +434,7 @@ ScriptsOnlyBuild:
     className: ActivationPlayableAsset
   - hash:
       serializedVersion: 2
-      Hash: f80d06800d5669aea7d07003b68b66ee
+      Hash: e3d7b853a6083cd136c0ec5fcecb0f7a
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: bulletscript
@@ -411,6 +452,12 @@ ScriptsOnlyBuild:
     className: TimelineAsset
   - hash:
       serializedVersion: 2
+      Hash: a801be20c20288025daeff1edcd47b51
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: waves
+  - hash:
+      serializedVersion: 2
       Hash: ee0cef6caaac8ae485bfa82f000f0f7b
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
@@ -421,6 +468,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: AudioTrack
+  - hash:
+      serializedVersion: 2
+      Hash: 19d995f3c51de4225b5045b68f788b44
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: pathfinding
   - hash:
       serializedVersion: 2
       Hash: ae83e830e7a90c0aff918c4c2e520825
@@ -435,7 +488,13 @@ ScriptsOnlyBuild:
     className: BeforeAfterTestCommandState
   - hash:
       serializedVersion: 2
-      Hash: 1b0b9fe6a8c2601d0f545a1dc6dec042
+      Hash: 859ea1daff6fa633574721348a9ae285
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: pathfindingfunction
+  - hash:
+      serializedVersion: 2
+      Hash: aca18a3daafd06839e7c6776e6ecc314
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: playerscript
@@ -541,18 +600,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
-  - hash:
-      serializedVersion: 2
-      Hash: 29b042bb77ec1cf6307a76b1d93cb973
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: pathfinding
-  - hash:
-      serializedVersion: 2
-      Hash: c8f2ac73a08bb8eb0a293d6eed20ff30
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: waves
   platform: 5
   scenePathNames:
   - Assets/Scenes/SampleScene.unity

@@ -59,6 +59,7 @@ public class guns : MonoBehaviour
     RectTransform reloadBar;
     public float reloadTimer;
     Gun reallyWeakGun;
+    
     //public Gun equipped;
     // Start is called before the first frame update
     void Start()
@@ -96,33 +97,49 @@ public class guns : MonoBehaviour
             ps.ammoScript.Pool.Push(other.gameObject);
             other.gameObject.SetActive(false);
         }
-        if (other.gameObject.tag == "Health")
+        /*if (other.gameObject.tag == "Health")
         {
             //equipped.Ammo += equipped.ClipSize;
             //magsUI.text = equipped.Ammo.ToString();
             //ammoCounter.text = "ammo: " + equipped.magazine + "/" + equipped.Ammo;
             ps.healthScript.Pool.Push(other.gameObject);
+            
+            ps.health = Mathf.Min(100, ps.health + 5);
+            
             other.gameObject.SetActive(false);
-        }
+        }*/
     }
 
     void shoot(Gun gun)
     {
+        
         //GameObject _bullet;
         //bulletscript _bs;
         //_bs = new bulletscript(gun.Speed,gameObject,gun.Range,gun.Damage);
         //_bs.speed =
-        //Debug.Log(gun.Damage);
+        //Debug.Log(nextFire);
+        //Debug.Log(bulletPool.Count);
         if (gun.magazine == 0)
         {
             return;
         }
-        if (nextFire < Time.time&&reloadTimer<Time.time)
+        //if (nextFire <= Time.time&&reloadTimer<Time.time)
+        //while(nextFire <= Time.time && reloadTimer < Time.time)
+        //Debug.Log((Time.time - nextFire) * gun.FireRate);
+        //for(;nextFire<=Time.time; nextFire += (1 / gun.FireRate))
+        if (nextFire <= Time.time && reloadTimer < Time.time)
         {
-            Debug.Log(bulletPool.Count);
+            //Debug.Log(Time.time + " :: " + nextFire);
+            //Debug.Log(Time.time+1/gun.FireRate);
+            //Debug.Log(Time.time);
+            //Debug.Log((Time.time - nextFire)-1/equipped.FireRate);
+            //Debug.Log((Time.time-nextFire)*equipped.FireRate);
+            //Debug.Log("shoot an extra " + equipped.FireRate / (Time.time - nextFire));
+            //Debug.Log("bang " + 1/equipped.FireRate + " " + Time.time);
+            //Debug.Log(bulletPool.Count);
             //bs.set(gun.Speed, gameObject, gun.Range, gun.Damage);
             //_bs = new bulletscript(gun.Speed, gameObject, gun.Range, gun.Damage);
-            nextFire = Time.time + 1 / gun.FireRate;
+            nextFire = Time.time + 1 / gun.FireRate;//+=  (1 / gun.FireRate);
             //GetComponent<playerscript>().velocity -= GetComponent<playerscript>().normalise(GetComponent<playerscript>().aimvector) * gun.Recoil;
             ps.velocity -= ps.normalise(ps.aimvector) * gun.Recoil;
             /*if (bulletPool.Count >= gun.Bullets)
@@ -163,12 +180,81 @@ public class guns : MonoBehaviour
         yield return new WaitForSeconds(time);
 
     }*/
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        if (equipped.magazine < equipped.ClipSize &&equipped.Ammo>0&& (Input.GetKeyDown(KeyCode.R)|| Input.GetMouseButtonDown(0)&& equipped.magazine<=0))
+        {
+            if (equipped.ClipSize - equipped.magazine > equipped.Ammo)
+            {
+                equipped.magazine += equipped.Ammo;
+                equipped.Ammo = 0;
+            }
+            else
+            {
+                equipped.Ammo -= equipped.ClipSize - equipped.magazine;
+                equipped.magazine = equipped.ClipSize;
+            }
+            //equipped.magazine += Mathf.Min(equipped.ClipSize - equipped.magazine, equipped.Ammo);
 
-        if (equipped.magazine < equipped.ClipSize&&Input.GetKeyDown(KeyCode.R))
+            //ammoCounter.text = "ammo: " + equipped.magazine + "/" + equipped.Ammo;
+            //bulletsUI.text = equipped.magazine.ToString();
+            //magsUI.text = equipped.Ammo.ToString();
+            reloadTimer = Time.time + equipped.ReloadTime;
+        }
+        if (reloadTimer > Time.time)
+        {
+            //filled.transform.localScale = new Vector3(0.9f*(1-(nextFire-Time.time)), 0.9f*(1-(nextFire - Time.time)), 1);
+            //filled.transform.localScale = new Vector3(0.9f*(1-(nextFire - Time.time)/equipped.ReloadTime),0.9f*( 1- (nextFire - Time.time) / equipped.ReloadTime), 1);
+            reloadBarContainer.SetActive(true);
+            //bulletsUI.text = (equipped.magazine* (1 - (reloadTimer - Time.time) / equipped.ReloadTime)).ToString();//.ToString();
+            reloadBar.anchorMax = new Vector2((1 - (reloadTimer - Time.time) / equipped.ReloadTime), 1);
+            reloadUI.enabled = true;
+        }
+        else
+        {
+            reloadBarContainer.SetActive(false);
+            reloadUI.enabled = false;
+            if (equipped.magazine == 0)
+            {
+                bulletsUI.color = new Color(1, 0, 0);
+            }
+            else
+            {
+                bulletsUI.color = new Color(1, 1, 1);
+            }
+            if (equipped.Ammo == 0)
+            {
+                magsUI.color = new Color(1, 0, 0);
+            }
+            else
+            {
+                magsUI.color = new Color(1, 1, 1);
+            }
+            bulletsUI.text = equipped.magazine.ToString();
+            magsUI.text = equipped.Ammo.ToString();
+            //filled.transform.localScale = new Vector3(0.9f, 0.9f, 1);
+            //filled.transform.localScale = new Vector3(0.9f,0.9f, 1);
+        }
+        if (Input.GetMouseButtonDown(0) && nextFire <= Time.time)
+        {
+            Debug.Log("Big");
+            nextFire = Time.time;
+            //Instantiate(bullet, transform.position,Quaternion.Euler(transform.rotation.x,transform.rotation.y, transform.rotation.z + Random.Range(-pistol.Spread/2,pistol.Spread/2)));
+        }
+        if (Input.GetMouseButton(0))
+        {
+            shoot(equipped);
+            //Instantiate(bullet, transform.position,Quaternion.Euler(transform.rotation.x,transform.rotation.y, transform.rotation.z + Random.Range(-pistol.Spread/2,pistol.Spread/2)));
+        }
+
+    }
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        //Time.timeScale = 0.5f;
+
+
+        /*if (equipped.magazine < equipped.ClipSize&&Input.GetKeyDown(KeyCode.R))
         {
             if(equipped.ClipSize - equipped.magazine > equipped.Ammo)
             {
@@ -204,7 +290,13 @@ public class guns : MonoBehaviour
             magsUI.text = equipped.Ammo.ToString();
             //filled.transform.localScale = new Vector3(0.9f, 0.9f, 1);
             //filled.transform.localScale = new Vector3(0.9f,0.9f, 1);
-        }
+        }*/
+        /*if (Input.GetMouseButtonDown(0)&&nextFire<=Time.time)
+        {
+            Debug.Log("Big");
+            //nextFire = Time.time;
+            //Instantiate(bullet, transform.position,Quaternion.Euler(transform.rotation.x,transform.rotation.y, transform.rotation.z + Random.Range(-pistol.Spread/2,pistol.Spread/2)));
+        }*/
         if (Input.GetMouseButton(0))
         {
             shoot(equipped);

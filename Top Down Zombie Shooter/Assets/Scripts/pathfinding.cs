@@ -161,23 +161,30 @@ public class pathfinding : MonoBehaviour
     {
         return new Vector2(normalise(vector.x, vector.y), normalise(vector.y, vector.x));
     }
+    private void Awake()
+    {
+        target = GameObject.Find("player");
+        WallMap = GameObject.Find("Zombies").GetComponent<waves>().WallMap;
+    }
+    
     void OnEnable()
     {
-        attacktimer = 0;
+        //Debug.Log("enable");
+        //attacktimer = 0;
         // rb = GetComponent<Rigidbody2D>();
         //pf = GameObject.Find("pathfinder");
         //Debug.Log(GetComponent<zombiescript>().WaveScript.wave);
         //zs.WaveScript.pf
         //pf = GetComponent<zombiescript>().WaveScript.pf;
 
+        //target = GameObject.Find("player");
         //WallMap = GameObject.Find("Walls");
         //velocity = new Vector2(0, 0);
         //WallCol = GetComponent<zombiescript>().WaveScript.WallCol;
-        WallMap = GetComponent<zombiescript>().WaveScript.WallMap;
+        //WallMap = zs.WaveScript.WallMap;
 
-        target = GameObject.Find("player");
-
-        path = zs.WaveScript.pf.GetComponent<pathfindingfunction>().path(transform.position, target.transform.position, WallMap.GetComponent<Tilemap>());
+        attacktimer = 0;
+        path = zs.WaveScript.pf.path(transform.position, target.transform.position, WallMap);
 
     }
     
@@ -192,7 +199,7 @@ public class pathfinding : MonoBehaviour
     }
     void FixedUpdate()
     {
-
+        //Debug.Log("fix");
         /*if (zs.coll.IsTouching(WallCol))
         {
             //zs.coll.
@@ -250,7 +257,7 @@ public class pathfinding : MonoBehaviour
             attacktimer += Time.fixedDeltaTime;
             if (attacktimer >= 0.75f)
             {
-                zs.WaveScript.ps.health -= 35;
+                zs.WaveScript.ps.health -= 10;
                 zs.WaveScript.ps.Healthbar.anchorMax = new Vector2(zs.WaveScript.ps.health / 100,1);
                 zs.WaveScript.ps.HealthIndicator.text = zs.WaveScript.ps.health + " HP";
                 zs.animator.SetTrigger("Attack");

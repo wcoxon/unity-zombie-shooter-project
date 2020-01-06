@@ -25,7 +25,12 @@ public class waves : MonoBehaviour
     public UnityEngine.UI.Text upgradeMessage;
     public Vector2 cameraDimensions;
     public GameObject upgrader;
-    
+
+    public int points;
+    //public int pointLimit;
+    public UnityEngine.UI.Text PointsUI;
+    //public RectTransform PointsBar;
+
     public float upgradeCounter;
     IEnumerator IndefiniteSpawner;
     //bool wavebreak;
@@ -204,7 +209,7 @@ public class waves : MonoBehaviour
     }
     public void incrementWave()
     {
-        if (pool.Count == transform.childCount)
+        if (pool.Count == transform.childCount&&!upgrader.activeSelf)
         {
             //WaveIndicator.text = "wave: " + wave;
             upgradeCounter = 0;
@@ -217,8 +222,11 @@ public class waves : MonoBehaviour
             upgradeMessage.enabled = false;
             //Debug.Log("new wave");
             wave += 1;
-            
-            IndefiniteSpawner = SpawnZombiesIndefinitely(5 / wave);
+            points = 0;
+            //pointLimit = wave * 5;
+            //PointsBar.anchorMax = new Vector2(points / pointLimit, 1);
+
+            IndefiniteSpawner = SpawnZombiesIndefinitely( 1+4/wave);
             WaveIndicator.text = "wave: " + wave;
             //StartCoroutine(SpawnZombies(wave, 0.5f));
             //StartCoroutine(SpawnZombiesIndefinitely(5/wave));
@@ -226,6 +234,92 @@ public class waves : MonoBehaviour
             //spawnzombies(wave);
         }
     }
+
+    void randomUpgrade()
+    {
+        //Debug.Log("Damage =="+ (25f + wave * 10f) / wave);
+        switch (Random.Range(0,9))
+        {
+            case 0:
+                if (gs.equipped.FireRate >= 50)
+                {
+                    randomUpgrade();
+                    break;
+                }
+                gs.equipped.FireRate = Mathf.Min(50, gs.equipped.FireRate * (1 + points / 20.0f));
+                upgradeMessage.text = "firing rate increased! x"+(1 + points / 20.0f).ToString();
+                break;
+
+            case 1:
+                if (gs.equipped.Spread < 5)
+                {
+                    randomUpgrade();
+                    break;
+                }
+                
+                gs.equipped.Spread /= 1.5f;
+                //upgradeMessage.text = "accuracy improved! x" + 1.5f;
+                upgradeMessage.text = "accuracy x" + 1.5f;
+                break;
+
+            case 2:
+                if (gs.equipped.Speed >= 50)
+                {
+                    randomUpgrade();
+                    break;
+                }
+                gs.equipped.Speed = Mathf.Min(50, gs.equipped.Speed * (1 + points / 20.0f));
+                //upgradeMessage.text = "Bullet velocity increased! x" + (1 + points / 10).ToString();
+                upgradeMessage.text = "Bullet velocity x" + (1 + points / 20.0f).ToString();
+                break;
+
+            case 3:
+                gs.equipped.Recoil /= 1.5f;
+                upgradeMessage.text = "Recoil -1/3";
+                break;
+
+            case 4:
+                if (gs.equipped.Bullets > 5)
+                {
+                    randomUpgrade();
+                    break;
+                }
+                gs.equipped.Bullets += Mathf.CeilToInt(points/20.0f);
+                upgradeMessage.text = "Multi-shot! +" + (Mathf.CeilToInt(points/20.0f)).ToString();
+                break;
+
+            case 5:
+                gs.equipped.Damage += (float)points/wave;// points;
+                //Debug.Log("Damage +" + 10.0f / (5 * points * (5 * wave + 2)));
+                upgradeMessage.text = "Damage +" + (float)points/wave;// 10.0f/(5*points*(5*wave+2));
+                break;
+
+            case 6:
+                gs.equipped.ClipSize += points;
+                upgradeMessage.text = "Magazine size +" + points;
+                break;
+
+            case 7:
+                if (gs.equipped.Knockback >= 50)
+                {
+                    randomUpgrade();
+                    break;
+                }
+                gs.equipped.Knockback = Mathf.Min(50, gs.equipped.Knockback+points);
+                upgradeMessage.text = "Knockback +" + points;
+                break;
+
+            case 8:
+                gs.equipped.ReloadTime /= 1.5f;
+                upgradeMessage.text = "reload time -1/3";
+                break;
+
+
+        }
+        //points = 0;
+        //PointsUI.text = "points: " + points;
+    }
+
     public void EndWave()
     {
         EnterPrompt.enabled = true;
@@ -233,10 +327,12 @@ public class waves : MonoBehaviour
         //upgrader.transform.GetChild(0).localScale = new Vector3(0, 0, 0);
         upgrader.SetActive(false);
         StopAllCoroutines();
-        switch (Random.Range(0, 9))
+        randomUpgrade();
+        /*switch (0)
         {
             case 0:
-                gs.equipped.FireRate += 5;
+                
+                gs.equipped.FireRate = Mathf.Min(50,gs.equipped.FireRate*(1 + ps.points/100));
                 Debug.Log("firerate");
                 upgradeMessage.text = "firing rate increased!";
                 break;
@@ -282,7 +378,59 @@ public class waves : MonoBehaviour
                 break;
 
 
-        }
+        }*/
+        //ps.points = 0;
+        //ps.PointsUI.text = "points: " + ps.points;
+        /*switch (1)
+        {
+            case 0:
+                gs.equipped.FireRate *= 1.25f;
+                Debug.Log("firerate");
+                upgradeMessage.text = "firing rate increased!";
+                break;
+            case 1:
+                gs.equipped.Spread /= 1.5f;
+                Debug.Log("spread");
+                upgradeMessage.text = "accuracy improved!";
+                break;
+            case 2:
+                gs.equipped.Speed += 5;
+                Debug.Log("speed");
+                upgradeMessage.text = "Bullet velocity increased!";
+                break;
+            case 3:
+                gs.equipped.Recoil /= 2;
+                Debug.Log("recoil");
+                upgradeMessage.text = "Recoil reduced!";
+                break;
+            case 4:
+                gs.equipped.Bullets += 1;
+                Debug.Log("bullets");
+                upgradeMessage.text = "Multi-shot!";
+                break;
+            case 5:
+                gs.equipped.Damage += 15;
+                Debug.Log("dam");
+                upgradeMessage.text = "Bullet damage increased!";
+                break;
+            case 6:
+                gs.equipped.ClipSize += 8;
+                Debug.Log("clip");
+                upgradeMessage.text = "Magazine size increased!";
+                break;
+            case 7:
+                gs.equipped.Knockback += 7;
+                Debug.Log("nok");
+                upgradeMessage.text = "bullet knockback increased!";
+                break;
+            case 8:
+                gs.equipped.ReloadTime /= 1.5f;
+                Debug.Log("time");
+                upgradeMessage.text = "reload shortened!";
+                break;
+
+
+        }*/
         upgradeMessage.enabled = true;
         //gs.equipped.Bullets +=1;
         gs.equipped.Spread = (gs.equipped.Bullets-1)*15;

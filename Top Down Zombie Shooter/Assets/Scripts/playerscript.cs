@@ -22,6 +22,9 @@ public class playerscript : MonoBehaviour
     Vector3 cameraposition;
     public RectTransform Healthbar;
     public GameObject GameOver;
+    //public int points;
+    //public int pointLimit;
+    //public UnityEngine.UI.Text PointsUI;
     //public UnityEngine.UI.Button restart;
     // Start is called before the first frame update
     void Start()
@@ -88,18 +91,32 @@ public class playerscript : MonoBehaviour
         //velocity += new Vector2(normalise(pter.transform.position).x * Mathf.Abs(velocity.x) * Time.deltaTime, normalise(pter.transform.position).y * Mathf.Abs(velocity.y) * Time.deltaTime);
         //pter.transform.position = new Vector2(transform.position.x,transform.position.y) + normalise(collision.contacts[0].normal);
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D other)
     {
        
         //Debug.Log("trig");
-        if (collision.tag == "Water"|| collision.tag == "Zombie")
+        if (other.tag == "Water"|| other.tag == "Zombie")
         {
             maxspeed = 3f;
         }
+        if (other.gameObject.tag == "Health")
+        {
+            //equipped.Ammo += equipped.ClipSize;
+            //magsUI.text = equipped.Ammo.ToString();
+            //ammoCounter.text = "ammo: " + equipped.magazine + "/" + equipped.Ammo;
+            healthScript.Pool.Push(other.gameObject);
+
+            health = Mathf.Min(100, health + 10);
+            Healthbar.anchorMax = new Vector2(health / 100, 1);
+            HealthIndicator.text = health + " HP";
+
+            other.gameObject.SetActive(false);
+
+        }
     }
-    private void OnTriggerExit2D(Collider2D collision)
+    private void OnTriggerExit2D(Collider2D other)
     {
-        if (collision.tag == "Water" || collision.tag =="Zombie")
+        if (other.tag == "Water" || other.tag =="Zombie")
         {
             maxspeed = 9f;
         }
@@ -121,6 +138,10 @@ public class playerscript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             waveScript.incrementWave();
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
         }
         //GameObject.Find("health").GetComponent<UnityEngine.UI.Text>().text = "health: " + health;///////
         //HealthIndicator.text = "health: " + health;
@@ -205,7 +226,7 @@ public class playerscript : MonoBehaviour
 
         transform.eulerAngles = new Vector3(0, 0, Mathf.Atan2(aimvector.y, aimvector.x) * 180 / Mathf.PI - 90.0f);
 
-        cameraposition = Vector3.MoveTowards((Vector2)cameraposition,normalise(aimvector) * aimvector.magnitude/3, Vector2.Distance(cameraposition, aimvector)*5*Time.deltaTime) + Vector3.forward * -10;// Vector2.Distance(Camera.main.transform.position,aimvector)) + Vector3.forward * -10;//new Vector3(transform.position.x + aimvector.x, transform.position.y + aimvector.y, -10);
+        cameraposition = Vector3.MoveTowards((Vector2)cameraposition,normalise(aimvector) * aimvector.magnitude/2, Vector2.Distance(cameraposition, normalise(aimvector) * aimvector.magnitude / 2) *5*Time.deltaTime) + Vector3.forward * -10;// Vector2.Distance(Camera.main.transform.position,aimvector)) + Vector3.forward * -10;//new Vector3(transform.position.x + aimvector.x, transform.position.y + aimvector.y, -10);
         Camera.main.transform.position = transform.position+cameraposition + Vector3.forward * -10;
 
         pter.transform.position = new Vector3(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y, 0);
