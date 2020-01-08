@@ -22,6 +22,7 @@ public class playerscript : MonoBehaviour
     Vector3 cameraposition;
     public RectTransform Healthbar;
     public GameObject GameOver;
+    public GameObject PauseMenu;
     //public int points;
     //public int pointLimit;
     //public UnityEngine.UI.Text PointsUI;
@@ -125,23 +126,41 @@ public class playerscript : MonoBehaviour
     {
         wallNormal = new Vector2(0, 0);
     }
-    
+
     // Update is called once per frame
-    public void restartfunc()
+    /*public void MainMenu()
+    {
+        SceneManager.LoadScene("MainMenuScene");
+    }
+    public void LoadGame()
     {
         SceneManager.LoadScene("SampleScene");
-    }
+    }*/
     void Update()
     {
 
-
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (PauseMenu.activeSelf)
+            {
+                Time.timeScale = 1.0f;
+                //Application.Quit();
+                PauseMenu.SetActive(false);
+            }
+            else
+            {
+                Time.timeScale = 0.0f;
+                //Application.Quit();
+                PauseMenu.SetActive(true);
+            }
+        }
+        if (Time.timeScale == 0.0f)
+        {
+            return;
+        }
         if (Input.GetKeyDown(KeyCode.Space))
         {
             waveScript.incrementWave();
-        }
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
         }
         //GameObject.Find("health").GetComponent<UnityEngine.UI.Text>().text = "health: " + health;///////
         //HealthIndicator.text = "health: " + health;

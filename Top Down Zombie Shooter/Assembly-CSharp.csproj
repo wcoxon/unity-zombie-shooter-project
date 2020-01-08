@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\bulletscript.cs" />
     <Compile Include="Assets\Scripts\guns.cs" />
+    <Compile Include="Assets\Scripts\MenuScript.cs" />
     <Compile Include="Assets\Scripts\pathfinding.cs" />
     <Compile Include="Assets\Scripts\pathfindingfunction.cs" />
     <Compile Include="Assets\Scripts\Pickups.cs" />

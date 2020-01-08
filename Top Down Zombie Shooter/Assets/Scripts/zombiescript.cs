@@ -55,7 +55,7 @@ public class zombiescript : MonoBehaviour
         rb.velocity += rb.velocity * -0.25f;
         if (health <= 0)
         {
-
+            animator.Rebind();
             WaveScript.points += 1;
             //Debug.Log((float)WaveScript.points / WaveScript.pointLimit);
             WaveScript.PointsUI.text = "Points: " + WaveScript.points;

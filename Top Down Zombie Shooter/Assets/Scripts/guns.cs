@@ -237,15 +237,15 @@ public class guns : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(0) && nextFire <= Time.time)
         {
-            Debug.Log("Big");
+            //Debug.Log("Big");
             nextFire = Time.time;
             //Instantiate(bullet, transform.position,Quaternion.Euler(transform.rotation.x,transform.rotation.y, transform.rotation.z + Random.Range(-pistol.Spread/2,pistol.Spread/2)));
         }
-        if (Input.GetMouseButton(0))
+        /*if (Input.GetMouseButton(0))
         {
             shoot(equipped);
             //Instantiate(bullet, transform.position,Quaternion.Euler(transform.rotation.x,transform.rotation.y, transform.rotation.z + Random.Range(-pistol.Spread/2,pistol.Spread/2)));
-        }
+        }*/
 
     }
     // Update is called once per frame
