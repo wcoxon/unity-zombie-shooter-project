@@ -28,6 +28,7 @@ public class MenuScript : MonoBehaviour
     public void Resume()
     {
         Time.timeScale = 1.0f;
+        Cursor.visible = false;
         gameObject.SetActive(false);
     }
 

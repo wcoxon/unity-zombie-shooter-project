@@ -22,13 +22,8 @@ public class bulletscript : MonoBehaviour
         damage = _damage;
         knockback = _knockback;
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-        //startPosition = transform.position;
-
-        //speed = 0.1f;
-    }
+    
+    
     private void OnEnable()
     {
         parent = GameObject.Find("player");
@@ -37,53 +32,50 @@ public class bulletscript : MonoBehaviour
         startPosition = transform.position;
         set(gun.Speed, parent, gun.Range, gun.Damage,gun.Knockback);
 
-        //set(
+        
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        //Debug.Log("collided");
+        
         if(other.gameObject.tag == "Zombie")
         {
-            //Debug.Log("collided");
-            //other.attachedRigidbody.velocity -= new Vector2(Mathf.Cos(transform.rotation.z * Mathf.PI / 180), Mathf.Sin(transform.rotation.z * Mathf.PI / 180))*5;
+            
+            
             other.attachedRigidbody.velocity = new Vector2(Mathf.Cos(transform.eulerAngles.z * Mathf.PI / 180+90), Mathf.Sin(transform.eulerAngles.z * Mathf.PI / 180+90))*knockback;
-            //Debug.Log(damage);
+            
             other.gameObject.GetComponent<zombiescript>().health -= damage;
         }
         if(other.gameObject.tag == "Wall"||other.gameObject.tag == "Zombie")
         {
-            //Debug.Log("Funck");
+            
             if (!gs.bulletPool.Contains(gameObject))
             {
                 gs.bulletPool.Push(gameObject);
             }
             gameObject.SetActive(false);
-            //Destroy(gameObject);
+            
         }
-        /*if (other.gameObject != parent && !other.isTrigger)
-        {
-            Destroy(gameObject);
-        }*/
+        
     }
 
-    // Update is called once per frame
+    
     void FixedUpdate()
     {
         
         if (new Vector2(transform.position.x - startPosition.x, transform.position.y - startPosition.y).magnitude < range)
         {
             transform.Translate(new Vector2(0, speed * Time.fixedDeltaTime));
-            //transform.Translate(new Vector2(0.5f*Mathf.Sin(2*Vector3.Distance(transform.position, startPosition)), speed * Time.deltaTime)); ;
+            
         }
         else
         {
-            //Destroy(GetComponent<pathfinding>().HighlightMap);
+            
             if (!gs.bulletPool.Contains(gameObject))
             {
                 gs.bulletPool.Push(gameObject);
             }
             gameObject.SetActive(false);
-            //Destroy(gameObject);
+            
         }
     }
 }

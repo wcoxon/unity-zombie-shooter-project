@@ -13,16 +13,10 @@ public class Pickups : MonoBehaviour
     public Stack<GameObject> Pool;
     public waves waveScript;
     public float interval;
-    //public float healthCounter;
-    //public GameObject health;
-    //public Transform healthParent;
-    //public int healthLimit;
-   // public Stack<GameObject> healthPool;
-    // Start is called before the first frame update
+    
     void Start()
     {
-       // healthCounter = 0;
-       // healthPool = new Stack<GameObject>();
+       
         Counter = 0;
         Pool = new Stack<GameObject>();
     }
@@ -54,20 +48,6 @@ public class Pickups : MonoBehaviour
                 Counter = 0;
             }
         }
-        /*
-        healthCounter += Time.deltaTime;
-        if (healthCounter >= 1 && healthParent.childCount - healthPool.Count < healthLimit && waveScript.pool.Count < waveScript.transform.childCount)
-        {
-            if (healthPool.Count > 0)
-            {
-                healthPool.Peek().transform.position = randomEmpty();
-                healthPool.Pop().SetActive(true);
-            }
-            else
-            {
-                Instantiate(health, randomEmpty(), Quaternion.Euler(0, 0, 0), healthParent);
-            }
-            healthCounter = 0;
-        }*/
+        
     }
 }

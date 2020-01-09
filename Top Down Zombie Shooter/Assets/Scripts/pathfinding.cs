@@ -103,52 +103,19 @@ public class Cell
 
 public class pathfinding : MonoBehaviour
 {
-    //public List<Cell> Cells;
-    // public List<Cell> ClosedCells;
-    // public List<Cell> OpenCells;
-    //public GameObject HighlightMap;
-    //public GameObject WallMap;
+    
     
     Tilemap WallMap;
-    //TilemapCollider2D WallCol;
-    //public Tile RedHighlightTile;
-    //public Tile GreenHighlightTile;
-    //public Tile BlueHighlightTile;
+    
     public Stack<Vector3> path;
     public GameObject target;
     public Vector3 targetpos;
     public Rigidbody2D rb;
-    //Stack<Cell> path;
-    //public GameObject pf;
-    //pathfindingfunction pf;
-    //public Vector3 next;
-    // Start is called before the first frame update
+    
     public zombiescript zs;
     float attacktimer;
     
-    //Vector2 velocity;
-    /*void Start()
-    {
-        path = new Stack<Vector3>();
-        //pf = GameObject.Find("pathfinder");
-        pf = GetComponent<zombiescript>().WaveScript.pf;
-
-        //WallMap = GameObject.Find("Walls");
-        WallMap = GetComponent<zombiescript>().WaveScript.WallMap;
-
-        target = GameObject.Find("player");
-
-        path = pf.GetComponent<pathfindingfunction>().path(transform.position, target.transform.position, WallMap.GetComponent<Tilemap>());
-
-
-
-
-    }*/
-
-    /*public void updatenext()
-    {
-        next = GameObject.Find("pathfinder").GetComponent<pathfindingfunction>().nextTileTowards(transform.position, target.transform.position, WallMap.GetComponent<Tilemap>());
-    }*/
+    
     float normalise(float x, float y)
     {
         if (x == 0)
@@ -169,19 +136,7 @@ public class pathfinding : MonoBehaviour
     
     void OnEnable()
     {
-        //Debug.Log("enable");
-        //attacktimer = 0;
-        // rb = GetComponent<Rigidbody2D>();
-        //pf = GameObject.Find("pathfinder");
-        //Debug.Log(GetComponent<zombiescript>().WaveScript.wave);
-        //zs.WaveScript.pf
-        //pf = GetComponent<zombiescript>().WaveScript.pf;
-
-        //target = GameObject.Find("player");
-        //WallMap = GameObject.Find("Walls");
-        //velocity = new Vector2(0, 0);
-        //WallCol = GetComponent<zombiescript>().WaveScript.WallCol;
-        //WallMap = zs.WaveScript.WallMap;
+        
 
         attacktimer = 0;
         path = zs.WaveScript.pf.path(transform.position, target.transform.position, WallMap);
@@ -190,26 +145,16 @@ public class pathfinding : MonoBehaviour
     
     private void OnTriggerStay2D(Collider2D other)
     {
-        //Debug.Log("collided");
+        
         if (other.gameObject.tag == "Zombie"&&!WallMap.HasTile(WallMap.WorldToCell(transform.position)))
         {
-            //Debug.Log("collided");
+            
             transform.position -= (Vector3)normalise((Vector2)other.transform.position - (Vector2)transform.position)*(1-Vector3.Magnitude(other.transform.position- transform.position));
         }
     }
     void FixedUpdate()
     {
-        //Debug.Log("fix");
-        /*if (zs.coll.IsTouching(WallCol))
-        {
-            //zs.coll.
-            Debug.Log("test");
-
-        }*/
-        /*if(transform.position == next)
-        {
-            updatenext();
-        }*/
+        
         //when player position changes update the path
         if(WallMap.WorldToCell(target.transform.position) != WallMap.WorldToCell(targetpos)&& !WallMap.HasTile(WallMap.WorldToCell(transform.position)))
         {
@@ -222,17 +167,7 @@ public class pathfinding : MonoBehaviour
         {
             path.Pop();
         }
-        //rb.MovePosition(Vector3.MoveTowards(transform.position, path.Peek(), 5 * Time.deltaTime));
-        //transform.position = Vector3.MoveTowards(transform.position,path.Peek(), 5 * Time.deltaTime);
-        //velocity = normalise(path.Peek() - transform.position)*5;
-        //rb.MovePosition(Vector3.MoveTowards(transform.position, path.Peek(), 5 * Time.deltaTime));
-
-        //rb.velocity += normalise(path.Peek() - transform.position) * 50 * Time.fixedDeltaTime;
-
-        //rb.velocity = normalise(rb.velocity) * Mathf.Min(rb.velocity.magnitude, 5);
-
-        //rb.AddForce(normalise(path.Peek() - transform.position)*20);
-        //accelerate
+        
         if (rb.velocity.magnitude > 1)
         {
             transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(rb.velocity.y, rb.velocity.x) * 180 / Mathf.PI - 90);
@@ -247,10 +182,9 @@ public class pathfinding : MonoBehaviour
 
             rb.velocity += normalise(path.Peek() - transform.position) * 50 * Time.fixedDeltaTime;
 
-            //rb.velocity += rb.velocity * -0.25f;
-            //limit velocity to 5
+            
             rb.velocity = normalise(rb.velocity) * Mathf.Min(rb.velocity.magnitude, 5);
-            //rb.AddForce(rb.velocity * -0.25f);
+            
         }
         else
         {
@@ -264,7 +198,7 @@ public class pathfinding : MonoBehaviour
                 attacktimer = 0;
             }
         }
-        //rb.velocity = normalise(path.Peek() - transform.position)*5;
+        
 
 
 

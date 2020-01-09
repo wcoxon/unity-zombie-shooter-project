@@ -9,11 +9,11 @@ public class pathfindingfunction : MonoBehaviour
     // Start is called before the first frame update
     
     public GameObject player;
-    //public Vector3 playertile;
+    
     public GameObject wall;
     void Start()
     {
-        //playertile = wall.GetComponent<UnityEngine.Tilemaps.Tilemap>().WorldToCell(player.transform.position);
+        
         
     }
     public Cell GetCellAtCoord(Vector3Int coord,List<Cell> Cells)
@@ -61,7 +61,7 @@ public class pathfindingfunction : MonoBehaviour
                 }
                 else if (!walls.HasTile(cel.Coordinates + new Vector3Int(x, y, 0)))
                 {
-                    //new Cell(cel.Coordinates + new Vector3Int(x, y, 0), cel.TargetCoordinates, cel);
+                    
                     CompareCells(new Cell(cel.Coordinates + new Vector3Int(x, y, 0), cel.TargetCoordinates, cel), GetCellAtCoord(cel.Coordinates + new Vector3Int(x, y, 0),Cells),Cells,Open);
 
                 }
@@ -102,8 +102,7 @@ public class pathfindingfunction : MonoBehaviour
 
         }
         path.Pop();
-        //Debug.Log(path.Peek().Coordinates);
-        //Debug.Log(position);
+        
         return walls.GetCellCenterWorld(path.Pop().Coordinates);
 
     }
@@ -141,21 +140,10 @@ public class pathfindingfunction : MonoBehaviour
             path.Push(path.Peek().ParentCell);
 
         }
-        //ret.Pop();
-        //Debug.Log(path.Peek().Coordinates);
-        //Debug.Log(position);
+        
         return ret;
 
     }
     // Update is called once per frame
-    void Update()
-    {
-        /*if(playertile != wall.GetComponent<UnityEngine.Tilemaps.Tilemap>().WorldToCell(player.transform.position))
-        {
-            for(int x=0;x< GameObject.Find("Zombies").transform.childCount; x++)
-            {
-                GameObject.Find("Zombies").transform.GetChild(x).GetComponent<pathfinding>().updatenext();
-            }
-        }*/
-    }
+    
 }
