@@ -1,2 +1,0 @@
-# unity zombie shooter project
- 

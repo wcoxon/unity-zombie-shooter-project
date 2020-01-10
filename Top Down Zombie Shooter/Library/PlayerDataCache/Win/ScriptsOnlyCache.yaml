@@ -28,7 +28,6 @@ ScriptsOnlyBuild:
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
-    - UnityEditor.TestTools.TestRunner.TestListCacheData
     UnityEngine.UI.dll:
     - UnityEngine.EventSystems.EventSystem
     - UnityEngine.EventSystems.StandaloneInputModule
@@ -655,5 +654,5 @@ ScriptsOnlyBuild:
   scenePathNames:
   - Assets/Scenes/MainMenuScene.unity
   - Assets/Scenes/GameScene.unity
-  playerPath: C:/Users/wcoxon/Documents/GitHub/unity-zombie-shooter-project/Top Down
-    Zombie Shooter/build/Top Down Zombie Shooter.exe
+  playerPath: C:/Users/wcoxon/Documents/GitHub/unity-zombie-shooter-project/Alpha
+    build/Top Down Zombie Shooter.exe
