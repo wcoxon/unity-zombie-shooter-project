@@ -61,6 +61,10 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
+    - Class: 82
+      Script: {instanceID: 0}
+    - Class: 83
+      Script: {instanceID: 0}
     - Class: 91
       Script: {instanceID: 0}
     - Class: 95
@@ -433,7 +437,7 @@ ScriptsOnlyBuild:
     className: RawImage
   - hash:
       serializedVersion: 2
-      Hash: b2d37b67c76c1a0eb1fb56a6fd8d15f1
+      Hash: 98c8e85bce5a2e30957f5e3b86820e2c
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: guns
@@ -651,4 +655,5 @@ ScriptsOnlyBuild:
   scenePathNames:
   - Assets/Scenes/MainMenuScene.unity
   - Assets/Scenes/GameScene.unity
-  playerPath: C:/Users/Bill/Top Down Zombie Shooter/build/Top Down Zombie Shooter.exe
+  playerPath: C:/Users/wcoxon/Documents/GitHub/unity-zombie-shooter-project/Top Down
+    Zombie Shooter/build/Top Down Zombie Shooter.exe

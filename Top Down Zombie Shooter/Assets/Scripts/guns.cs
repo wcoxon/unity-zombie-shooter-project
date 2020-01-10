@@ -44,7 +44,8 @@ public class guns : MonoBehaviour
     Gun weakGun;
     public Gun equipped;
     public GameObject filled;
-    
+    public AudioSource GunSounds;
+
     public Vector3 bulletoffset;
     public Transform Bullets;
     public playerscript ps;
@@ -57,7 +58,8 @@ public class guns : MonoBehaviour
     RectTransform reloadBar;
     public float reloadTimer;
     Gun reallyWeakGun;
-    
+    public AudioSource PickupSounds;
+    public AudioSource reloadSound;
     
     void Start()
     {
@@ -81,8 +83,12 @@ public class guns : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-
-        if (other.gameObject.tag == "Ammo")
+        if (other.gameObject.tag == "Ammo"|| other.gameObject.tag == "Health")
+        {
+            PickupSounds.Play();
+            
+        }
+            if (other.gameObject.tag == "Ammo")
         {
             equipped.Ammo += equipped.ClipSize;
             magsUI.text = equipped.Ammo.ToString();
@@ -104,7 +110,8 @@ public class guns : MonoBehaviour
         
         if (nextFire <= Time.time && reloadTimer < Time.time)
         {
-            
+            GunSounds.pitch = 1+Random.Range(-0.5f,0.5f);
+            GunSounds.Play();
             nextFire = Time.time + 1 / gun.FireRate;
             
             ps.velocity -= ps.normalise(ps.aimvector) * gun.Recoil;
@@ -135,6 +142,7 @@ public class guns : MonoBehaviour
     {
         if (equipped.magazine < equipped.ClipSize &&equipped.Ammo>0&& (Input.GetKeyDown(KeyCode.R)|| Input.GetMouseButtonDown(0)&& equipped.magazine<=0))
         {
+            reloadSound.PlayDelayed(equipped.ReloadTime);
             if (equipped.ClipSize - equipped.magazine > equipped.Ammo)
             {
                 equipped.magazine += equipped.Ammo;

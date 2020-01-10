@@ -180,9 +180,9 @@ public class waves : MonoBehaviour
                     break;
                 }
                 
-                gs.equipped.Spread /= 1.5f;
+                gs.equipped.Spread /= 1+points/20.0f;
                 
-                upgradeMessage.text = "accuracy x" + 1.5f;
+                upgradeMessage.text = "accuracy x" + (1 + points / 20.0f);
                 break;
 
             case 2:
